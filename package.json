@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Divyansh Chahar <divyanshchahar@outlook.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "private": "true",
+  "workspaces": [
+    "server"
+  ]
 }
