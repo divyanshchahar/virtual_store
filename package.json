@@ -11,5 +11,8 @@
   ],
   "devDependencies": {
     "concurrently": "^7.6.0"
+  },
+  "scripts": {
+    "start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\""
   }
 }
