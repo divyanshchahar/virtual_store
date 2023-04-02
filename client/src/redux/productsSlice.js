@@ -32,6 +32,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "rejected";
+        state.error = action.payload;
       })
       .addCase(fetchProducts.pending, (state, action) => {
         state.status = "pending";
