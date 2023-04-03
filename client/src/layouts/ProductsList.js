@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchProducts } from "../redux/productsSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductsList() {
   useEffect(() => {
@@ -11,6 +12,8 @@ function ProductsList() {
   const dispatch = useDispatch();
 
   const products = useSelector((state) => state.products);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -43,6 +46,9 @@ function ProductsList() {
                   src={item.images[0]}
                   className="card-image-top"
                   alt={`${item.name}`}
+                  onClick={() => {
+                    navigate(`products/${item._id}`);
+                  }}
                 />
                 <div className="card-body">
                   <p className="card-text">{item.name}</p>
