@@ -43,7 +43,7 @@ function RegistrationPage() {
                     type="password"
                     className="form-control"
                     id="input-password"
-                    aria-describedby="emailHelp"
+                    aria-describedby="password"
                   />
                 </div>
 
@@ -58,7 +58,7 @@ function RegistrationPage() {
                     type="password"
                     className="form-control"
                     id="input-confirm-password"
-                    aria-describedby="emailHelp"
+                    aria-describedby="confirm-password"
                   />
                 </div>
               </div>
@@ -68,7 +68,65 @@ function RegistrationPage() {
           <div className="carousel-item">
             <div className="card">
               <div className="card-body">
-                <h1>USER ADDRESS</h1>
+                <div className="mb-3">
+                  <label htmlFor="input-house-number" className="form-label">
+                    House/Apartment No
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-house-number"
+                    aria-describedby="house-number"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-street" className="form-label">
+                    Street
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-street"
+                    aria-describedby="street"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-city" className="form-label">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-city"
+                    aria-describedby="city"
+                  />
+
+                  <div className="mb-3">
+                    <label htmlFor="input-pin" className="form-label">
+                      PIN Code
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="input-pin"
+                      aria-describedby="pin-code"
+                    />
+
+                    <div className="mb-3">
+                      <label htmlFor="input-" className="form-label">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="input-"
+                        aria-describedby="country"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
