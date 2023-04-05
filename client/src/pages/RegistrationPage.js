@@ -66,7 +66,7 @@ function RegistrationPage() {
           </div>
           {/* USER ADDRESS */}
           <div className="carousel-item">
-            <div className="card">
+            <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
                 <div className="mb-3">
                   <label htmlFor="input-house-number" className="form-label">
@@ -115,13 +115,13 @@ function RegistrationPage() {
                     />
 
                     <div className="mb-3">
-                      <label htmlFor="input-" className="form-label">
+                      <label htmlFor="input-country" className="form-label">
                         Country
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="input-"
+                        id="input-country"
                         aria-describedby="country"
                       />
                     </div>
@@ -132,9 +132,69 @@ function RegistrationPage() {
           </div>
           {/* PAYMENT DETAILS */}
           <div className="carousel-item">
-            <div className="card">
+            <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
-                <h1>PAYMENT DETAILS</h1>
+                <div className="mb-3">
+                  <label htmlFor="input-name-on-card" className="form-label">
+                    Name on card
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-name-on-card"
+                    aria-describedby="name on card"
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-card" className="form-label">
+                    Card
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-card"
+                    aria-describedby="card"
+                  />
+                </div>
+
+                <div className="row mb-3">
+                  <div className="col">
+                    <label htmlFor="input-valid-from" className="form-label">
+                      Valid From
+                    </label>
+                    <input
+                      type="month"
+                      className="form-control"
+                      id="input-valid-from"
+                      aria-describedby="valid-from"
+                    />
+                  </div>
+
+                  <div className="col">
+                    <label htmlFor="input-valid-through" className="form-label">
+                      Valid Through
+                    </label>
+                    <input
+                      type="month"
+                      className="form-control"
+                      id="input-valid-through"
+                      aria-describedby="valid-from"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-cvv" className="form-label">
+                    CVV
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-cvv"
+                    aria-describedby="cvv"
+                  />
+                </div>
               </div>
             </div>
           </div>
