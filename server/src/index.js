@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const productsRouter = require("./routes/products");
 const userRouter = require("./routes/userRoute");
 const cartRouter = require("./routes/cartRoute");
+const ordersRouter = require("./routes/ordersRoute");
 
 const app = express();
 
@@ -16,3 +17,4 @@ app.use(express.json());
 app.use("/products", productsRouter);
 app.use("/users", userRouter);
 app.use("/carts", cartRouter);
+app.use("/orders", ordersRouter);
