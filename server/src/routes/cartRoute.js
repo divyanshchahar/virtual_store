@@ -1,9 +1,12 @@
 const express = require("express");
 const Cart = require("../schema/cartSchema");
 
+const checkJwt = require("../middleware/checkJwt");
+const { checkCartScopes } = require("../middleware/checkScopes");
+
 const router = express.Router();
 
-router.route("/").post(async (req, res) => {
+router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
   try {
     const cart = await Cart.create(req.body);
     res.status(200).send(cart._id);
@@ -12,7 +15,7 @@ router.route("/").post(async (req, res) => {
   }
 });
 
-router.route("/").put(async (req, res) => {
+router.route("/").put(checkJwt, checkCartScopes, async (req, res) => {
   try {
     let itemNotPresent = true;
 
