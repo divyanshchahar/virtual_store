@@ -71,11 +71,6 @@ function HomeRootPage() {
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Cart
-                  </a>
-                </li>
-                <li className="nav-item">
                   <Link to="orders" className="nav-link">
                     Orders
                   </Link>
