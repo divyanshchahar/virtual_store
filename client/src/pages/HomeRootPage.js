@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 function HomeRootPage() {
   return (
@@ -69,17 +69,16 @@ function HomeRootPage() {
                     Cart
                   </a>
                 </li>
-
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <Link to="orders" className="nav-link">
                     Orders
-                  </a>
+                  </Link>
                 </li>
 
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
+                  <Link to="account" className="nav-link">
                     Account
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
