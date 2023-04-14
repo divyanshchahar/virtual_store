@@ -1,6 +1,7 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 
 function HomeRootPage() {
+  const navigate = useNavigate();
   return (
     <>
       <nav className="navbar navbar-expand-md bg-body-tertiary">
@@ -12,7 +13,12 @@ function HomeRootPage() {
 
           {/* BUTTON GROUP`` */}
           <div className="order-md-last">
-            <button className="btn position-relative">
+            <button
+              className="btn position-relative"
+              onClick={() => {
+                navigate("cart");
+              }}
+            >
               <i className="bi bi-cart-fill" style={{ fontSize: "2rem" }} />
               <span class="position-absolute top-25 start-50  badge rounded-pill bg-danger">
                 99+
