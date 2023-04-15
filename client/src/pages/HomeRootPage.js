@@ -1,6 +1,8 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function HomeRootPage() {
+  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const navigate = useNavigate();
   return (
     <>
@@ -65,9 +67,27 @@ function HomeRootPage() {
             >
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Login/Logout
-                  </a>
+                  {isAuthenticated ? (
+                    <button
+                      className="nav-link"
+                      onClick={() =>
+                        logout({
+                          logoutParams: { returnTo: window.location.href },
+                        })
+                      }
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <button
+                      className="nav-link"
+                      onClick={() => {
+                        loginWithRedirect();
+                      }}
+                    >
+                      Login
+                    </button>
+                  )}
                 </li>
 
                 <li className="nav-item">
