@@ -14,15 +14,15 @@ function Routing() {
       <Routes>
         <Route path="/" element={<HomeRootPage />}>
           <Route index element={<HomePage />} />
-          <Route path="products/:productId" element={<SingleProductPage />} />
+          <Route path="products/:productId" element={SingleProductPage} />
           <Route
             path="user_registration"
-            element={<AuthenticationGuard component={<RegistrationPage />} />}
+            element={<AuthenticationGuard component={RegistrationPage} />}
           />
           <Route path="cart" element={<CartPage />} />
           <Route
             path="orders"
-            element={<AuthenticationGuard component={<OrderHistory />} />}
+            element={<AuthenticationGuard component={OrderHistory} />}
           />
         </Route>
       </Routes>
