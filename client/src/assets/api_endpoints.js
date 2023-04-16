@@ -1,3 +1,3 @@
-const apiEndPoints = { products: "/products" };
+const apiEndPoints = { products: "/products", orders: "orders" };
 
 export default apiEndPoints;

@@ -19,7 +19,11 @@ root.render(
         <Auth0Provider
           domain={process.env.REACT_APP_DOMAIN}
           clientId={process.env.REACT_APP_CLIENT_ID}
-          authorizationParams={{ redirect_uri: window.location.href }}
+          authorizationParams={{
+            redirect_uri: window.location.href,
+            audience: process.env.REACT_APP_AUDIENCE,
+            scope: "write:orders",
+          }}
         >
           <App />
         </Auth0Provider>

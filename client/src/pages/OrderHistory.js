@@ -1,4 +1,22 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { createOrdersApi } from "../redux/ordersSlice";
+
+import { useAuth0 } from "@auth0/auth0-react";
+
+const putOrder = {
+  customerId: "64358dc3bc3d299a15ec28a4",
+  products: [
+    {
+      productId: "64254b41e4f8dae9211a1579",
+      qty: 3,
+    },
+    {
+      productId: "64254b41e4f8dae9211a1578",
+      qty: 2,
+    },
+  ],
+};
 
 const orders = [
   {
@@ -50,6 +68,10 @@ function OrderHistory() {
     processedData.push(temp);
   });
 
+  const dispatch = useDispatch();
+
+  const { getAccessTokenSilently } = useAuth0();
+
   return (
     <>
       {processedData.map((item) => {
@@ -91,6 +113,21 @@ function OrderHistory() {
           </div>
         );
       })}
+      <button
+        className="btn btn-primary"
+        onClick={async () => {
+          const acessToken = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: process.env.REACT_APP_AUDIENCE,
+              scope: "write:orders",
+            },
+          });
+          const data = { orderData: putOrder, acesstoken: acessToken };
+          dispatch(createOrdersApi(data));
+        }}
+      >
+        Buy Now
+      </button>
     </>
   );
 }
@@ -99,4 +136,3 @@ export default OrderHistory;
 
 // TODO:
 // 1. Remove hardcoded values i.e. orders array
-// 2. Include slice functionality
