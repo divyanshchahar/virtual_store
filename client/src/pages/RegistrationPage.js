@@ -34,33 +34,6 @@ function RegistrationPage() {
                     aria-describedby="e-mail"
                   />
                 </div>
-
-                <div className="mb-3">
-                  <label htmlFor="input-password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="input-password"
-                    aria-describedby="password"
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label
-                    htmlFor="input-confirm-password"
-                    className="form-label"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="input-confirm-password"
-                    aria-describedby="confirm-password"
-                  />
-                </div>
               </div>
             </div>
           </div>
