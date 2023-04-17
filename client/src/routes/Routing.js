@@ -4,7 +4,7 @@ import SingleProductPage from "../pages/SingleProductPage";
 import RegistrationPage from "../pages/RegistrationPage";
 import HomeRootPage from "../pages/HomeRootPage";
 import CartPage from "../pages/CartPage";
-import OrderHistory from "../pages/OrderHistory";
+import OrdersPage from "../pages/OrdersPage";
 
 import { AuthenticationGuard } from "./AuthenticationGuard";
 
@@ -22,7 +22,7 @@ function Routing() {
           <Route path="cart" element={<CartPage />} />
           <Route
             path="orders"
-            element={<AuthenticationGuard component={OrderHistory} />}
+            element={<AuthenticationGuard component={OrdersPage} />}
           />
         </Route>
       </Routes>

@@ -39,7 +39,7 @@ const orders = [
   },
 ];
 
-function OrderHistory() {
+function OrdersPage() {
   let productIds = [];
   let processedData = [];
 
@@ -132,7 +132,7 @@ function OrderHistory() {
   );
 }
 
-export default OrderHistory;
+export default OrdersPage;
 
 // TODO:
 // 1. Remove hardcoded values i.e. orders array
