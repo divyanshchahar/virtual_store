@@ -1,8 +1,18 @@
 import { useState } from "react";
 
+import { createUsers } from "../redux/usersSlice";
+
+import { useAuth0 } from "@auth0/auth0-react";
+
+import { useDispatch } from "react-redux";
+
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 
 function RegistrationPage() {
+  const dispatch = useDispatch();
+
+  const { getAccessTokenSilently } = useAuth0();
+
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [house, setHouse] = useState();
@@ -16,8 +26,8 @@ function RegistrationPage() {
   const [endMonth, setEndMonth] = useState();
   const [cvv, setCvv] = useState();
 
-  const handleClick = () => {
-    const alertShown = validateRegistrationForm({
+  const handleClick = async () => {
+    const userData = {
       name,
       email,
       house,
@@ -30,7 +40,22 @@ function RegistrationPage() {
       startMonth,
       endMonth,
       cvv,
-    });
+    };
+
+    const alertShown = validateRegistrationForm(userData);
+
+    if (!alertShown) {
+      const acessToken = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: process.env.REACT_APP_AUDIENCE,
+          scope: "write:users",
+        },
+      });
+
+      const data = { userData: userData, acessToken: acessToken };
+
+      dispatch(createUsers(data));
+    }
   };
 
   return (
