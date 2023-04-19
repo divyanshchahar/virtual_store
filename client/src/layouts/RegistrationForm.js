@@ -31,16 +31,20 @@ function RegistrationForm() {
       name,
       email,
       authId: user.sub,
-      house,
-      street,
-      city,
-      pin,
-      country,
-      cardNumber,
-      nameOnCard,
-      startMonth,
-      endMonth,
-      cvv,
+      address: {
+        house,
+        street,
+        city,
+        pin,
+        country,
+      },
+      payment: {
+        cardNumber,
+        nameOnCard,
+        startMonth,
+        endMonth,
+        cvv,
+      },
     };
 
     const alertShown = validateRegistrationForm(userData);
