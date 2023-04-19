@@ -1,9 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { resetUser } from "../redux/usersSlice";
+import { useDispatch } from "react-redux";
 
 function TopNavBar() {
   const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <nav className="navbar navbar-expand-md bg-body-tertiary">
       <div className="container-fluid">
@@ -66,20 +70,19 @@ function TopNavBar() {
                 {isAuthenticated ? (
                   <button
                     className="nav-link"
-                    onClick={() =>
+                    onClick={() => {
+                      dispatch(resetUser());
                       logout({
                         logoutParams: { returnTo: window.location.href },
-                      })
-                    }
+                      });
+                    }}
                   >
                     Logout
                   </button>
                 ) : (
                   <button
                     className="nav-link"
-                    onClick={() => {
-                      loginWithRedirect();
-                    }}
+                    onClick={() => loginWithRedirect()}
                   >
                     Login
                   </button>
