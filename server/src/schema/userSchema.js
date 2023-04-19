@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     cardNo: String,
     validFrom: String,
     validUpto: String,
-    CVV: String,
+    cvv: String,
   },
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   updatedAt: { type: Date, default: () => Date.now() },

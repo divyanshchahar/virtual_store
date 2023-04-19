@@ -1,30 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { createUsers } from "../redux/usersSlice";
+import { createUsers, getUsers } from "../redux/usersSlice";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 
 function RegistrationForm() {
   const dispatch = useDispatch();
 
-  const { getAccessTokenSilently, user } = useAuth0();
+  const selectedUser = useSelector((state) => state.users.users);
 
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [house, setHouse] = useState();
-  const [street, setStreet] = useState();
-  const [city, setCity] = useState();
-  const [pin, setPin] = useState();
-  const [country, setCountry] = useState();
-  const [nameOnCard, setNameOnCard] = useState();
-  const [cardNo, setCardNo] = useState();
-  const [validFrom, setValidFrom] = useState();
-  const [validUpto, setValidUpto] = useState();
-  const [cvv, setCvv] = useState();
+  const { getAccessTokenSilently, user, isAuthenticated, isLoading } =
+    useAuth0();
+
+  const [name, setName] = useState(null || selectedUser.name);
+  const [email, setEmail] = useState(null || selectedUser.email);
+  const [house, setHouse] = useState(null || selectedUser.address.house);
+  const [street, setStreet] = useState(null || selectedUser.address.street);
+  const [city, setCity] = useState(null || selectedUser.address.city);
+  const [pin, setPin] = useState(null || selectedUser.address.pin);
+  const [country, setCountry] = useState(null || selectedUser.address.country);
+  const [nameOnCard, setNameOnCard] = useState(
+    null || selectedUser.payment.nameOnCard
+  );
+  const [cardNo, setCardNo] = useState(null || selectedUser.payment.cardNo);
+  const [validFrom, setValidFrom] = useState(
+    null || selectedUser.payment.validFrom
+  );
+  const [validUpto, setValidUpto] = useState(
+    null || selectedUser.payment.validUpto
+  );
+  const [cvv, setCvv] = useState(null || selectedUser.payment.cvv);
+
+  useEffect(() => {
+    const setUserOnPageLoad = async () => {
+      if (isAuthenticated && !isLoading) {
+        const acessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: process.env.REACT_APP_AUDIENCE,
+            scope: "write:users",
+          },
+        });
+
+        const authId = user.sub;
+        const data = { authId, acessToken };
+
+        dispatch(getUsers(data));
+      }
+    };
+
+    setUserOnPageLoad();
+  }, [isAuthenticated, isLoading]);
 
   const handleClick = async () => {
     const userData = {

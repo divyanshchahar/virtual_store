@@ -6,10 +6,10 @@ const { checkUsersScopes } = require("../middleware/checkScopes");
 
 const router = express.Router();
 
-router.route("/").get(checkJwt, checkUsersScopes, async (req, res) => {
+router.route("/:authId").get(checkJwt, checkUsersScopes, async (req, res) => {
   try {
-    const user = await User.find({ email: req.body.email });
-    res.status(200).send(user);
+    const user = await User.find({ authId: req.params.authId });
+    res.status(200).send(user[0]);
   } catch (error) {
     res.status(500).send(e.message);
   }
