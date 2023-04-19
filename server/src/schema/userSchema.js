@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   payment: {
     nameOnCard: String,
-    cardNo: Number,
+    cardNo: String,
     validFrom: String,
     validUpto: String,
     CVV: String,
