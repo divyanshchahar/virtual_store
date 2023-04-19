@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 
-function AccountPage() {
+function RegistrationForm() {
   const dispatch = useDispatch();
 
   const { getAccessTokenSilently } = useAuth0();
@@ -70,6 +70,7 @@ function AccountPage() {
           <div className="carousel-item active">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
+                <h5 class="card-title">User Details</h5>
                 <div className="mb-3">
                   <label htmlFor="input-name" className="form-label">
                     Your Name
@@ -104,6 +105,7 @@ function AccountPage() {
           <div className="carousel-item">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
+                <h5 class="card-title">Address</h5>
                 <div className="mb-3">
                   <label htmlFor="input-house-number" className="form-label">
                     House/Apartment No
@@ -180,6 +182,7 @@ function AccountPage() {
           <div className="carousel-item">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
+                <h5 class="card-title">Payment Details</h5>
                 <div className="mb-3">
                   <label htmlFor="input-name-on-card" className="form-label">
                     Name on card
@@ -301,4 +304,4 @@ function AccountPage() {
   );
 }
 
-export default AccountPage;
+export default RegistrationForm;
