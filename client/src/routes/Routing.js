@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import SingleProductPage from "../pages/SingleProductPage";
-import RegistrationPage from "../pages/RegistrationPage";
+import AccountPage from "../pages/AccountPage";
 import HomeRootPage from "../pages/HomeRootPage";
 import CartPage from "../pages/CartPage";
 import OrdersPage from "../pages/OrdersPage";
@@ -17,7 +17,7 @@ function Routing() {
           <Route path="products/:productId" element={SingleProductPage} />
           <Route
             path="user_registration"
-            element={<AuthenticationGuard component={RegistrationPage} />}
+            element={<AuthenticationGuard component={AccountPage} />}
           />
           <Route path="cart" element={<CartPage />} />
           <Route

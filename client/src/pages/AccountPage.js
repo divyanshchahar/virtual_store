@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 
-function RegistrationPage() {
+function AccountPage() {
   const dispatch = useDispatch();
 
   const { getAccessTokenSilently } = useAuth0();
@@ -309,4 +309,4 @@ function RegistrationPage() {
   );
 }
 
-export default RegistrationPage;
+export default AccountPage;
