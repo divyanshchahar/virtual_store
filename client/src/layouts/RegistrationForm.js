@@ -21,9 +21,9 @@ function RegistrationForm() {
   const [pin, setPin] = useState();
   const [country, setCountry] = useState();
   const [nameOnCard, setNameOnCard] = useState();
-  const [cardNumber, setcardNumber] = useState();
-  const [startMonth, setStartMonth] = useState();
-  const [endMonth, setEndMonth] = useState();
+  const [cardNo, setCardNo] = useState();
+  const [validFrom, setValidFrom] = useState();
+  const [validUpto, setValidUpto] = useState();
   const [cvv, setCvv] = useState();
 
   const handleClick = async () => {
@@ -39,10 +39,10 @@ function RegistrationForm() {
         country,
       },
       payment: {
-        cardNumber,
+        cardNo,
         nameOnCard,
-        startMonth,
-        endMonth,
+        validFrom,
+        validUpto,
         cvv,
       },
     };
@@ -211,8 +211,8 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-card"
                     aria-describedby="card"
-                    value={cardNumber}
-                    onChange={(e) => setcardNumber(e.target.value)}
+                    value={cardNo}
+                    onChange={(e) => setCardNo(e.target.value)}
                   />
                 </div>
 
@@ -226,8 +226,8 @@ function RegistrationForm() {
                       className="form-control"
                       id="input-valid-from"
                       aria-describedby="valid-from"
-                      value={startMonth}
-                      onChange={(e) => setStartMonth(e.target.value)}
+                      value={validFrom}
+                      onChange={(e) => setValidFrom(e.target.value)}
                     />
                   </div>
 
@@ -240,8 +240,8 @@ function RegistrationForm() {
                       className="form-control"
                       id="input-valid-through"
                       aria-describedby="valid-from"
-                      value={endMonth}
-                      onChange={(e) => setEndMonth(e.target.value)}
+                      value={validUpto}
+                      onChange={(e) => setValidUpto(e.target.value)}
                     />
                   </div>
                 </div>

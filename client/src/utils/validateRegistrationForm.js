@@ -3,14 +3,14 @@ function validateRegistrationForm({
   email,
   authId,
   address: { house, street, city, pin, country },
-  payment: { cardNumber, nameOnCard, startMonth, endMonth, cvv },
+  payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
 }) {
   const data = {
     name,
     email,
     authId,
     address: { house, street, city, pin, country },
-    payment: { cardNumber, nameOnCard, startMonth, endMonth, cvv },
+    payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
   };
 
   const attributeNames = {
@@ -21,10 +21,10 @@ function validateRegistrationForm({
     city: "City",
     pin: "PIN",
     country: "Country",
-    cardNumber: "Card Number",
+    cardNo: "Card Number",
     nameOnCard: "Name on Card",
-    startMonth: "Valid From",
-    endMonth: "Valid Through",
+    validFrom: "Valid From",
+    validUpto: "Valid Through",
     cvv: "CVV",
   };
 
