@@ -1,0 +1,341 @@
+import { useEffect, useState } from "react";
+
+import { createUsers, getUsers } from "../redux/usersSlice";
+
+import { useAuth0 } from "@auth0/auth0-react";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import validateRegistrationForm from "../utils/validateRegistrationForm";
+
+function RegistrationForm() {
+  const dispatch = useDispatch();
+
+  const selectedUser = useSelector((state) => state.users.users);
+
+  const { getAccessTokenSilently, user, isAuthenticated, isLoading } =
+    useAuth0();
+
+  const [name, setName] = useState(null || selectedUser.name);
+  const [email, setEmail] = useState(null || selectedUser.email);
+  const [house, setHouse] = useState(null || selectedUser.address.house);
+  const [street, setStreet] = useState(null || selectedUser.address.street);
+  const [city, setCity] = useState(null || selectedUser.address.city);
+  const [pin, setPin] = useState(null || selectedUser.address.pin);
+  const [country, setCountry] = useState(null || selectedUser.address.country);
+  const [nameOnCard, setNameOnCard] = useState(
+    null || selectedUser.payment.nameOnCard
+  );
+  const [cardNo, setCardNo] = useState(null || selectedUser.payment.cardNo);
+  const [validFrom, setValidFrom] = useState(
+    null || selectedUser.payment.validFrom
+  );
+  const [validUpto, setValidUpto] = useState(
+    null || selectedUser.payment.validUpto
+  );
+  const [cvv, setCvv] = useState(null || selectedUser.payment.cvv);
+
+  useEffect(() => {
+    const setUserOnPageLoad = async () => {
+      if (isAuthenticated && !isLoading) {
+        const acessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: process.env.REACT_APP_AUDIENCE,
+            scope: "write:users",
+          },
+        });
+
+        const authId = user.sub;
+        const data = { authId, acessToken };
+
+        dispatch(getUsers(data));
+      }
+    };
+
+    setUserOnPageLoad();
+  }, [isAuthenticated, isLoading]);
+
+  const handleClick = async () => {
+    const userData = {
+      name,
+      email,
+      authId: user.sub,
+      address: {
+        house,
+        street,
+        city,
+        pin,
+        country,
+      },
+      payment: {
+        cardNo,
+        nameOnCard,
+        validFrom,
+        validUpto,
+        cvv,
+      },
+    };
+
+    const alertShown = validateRegistrationForm(userData);
+
+    if (!alertShown) {
+      const acessToken = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: process.env.REACT_APP_AUDIENCE,
+          scope: "write:users",
+        },
+      });
+
+      const data = { userData: userData, acessToken: acessToken };
+
+      dispatch(createUsers(data));
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <div
+        id="registration-form-carousel"
+        className="carousel slide"
+        data-bs-wrap="false"
+      >
+        <div className="carousel-inner">
+          {/* USER DETAILS */}
+          <div className="carousel-item active">
+            <div className="card m-auto" style={{ maxWidth: "50rem" }}>
+              <div className="card-body">
+                <h5 class="card-title">User Details</h5>
+                <div className="mb-3">
+                  <label htmlFor="input-name" className="form-label">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-name"
+                    aria-describedby="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-email" className="form-label">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="input-email"
+                    aria-describedby="e-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* USER ADDRESS */}
+          <div className="carousel-item">
+            <div className="card m-auto" style={{ maxWidth: "50rem" }}>
+              <div className="card-body">
+                <h5 class="card-title">Address</h5>
+                <div className="mb-3">
+                  <label htmlFor="input-house-number" className="form-label">
+                    House/Apartment No
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-house-number"
+                    aria-describedby="house-number"
+                    value={house}
+                    onChange={(e) => setHouse(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-street" className="form-label">
+                    Street
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-street"
+                    aria-describedby="street"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-city" className="form-label">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-city"
+                    aria-describedby="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+
+                  <div className="mb-3">
+                    <label htmlFor="input-pin" className="form-label">
+                      PIN Code
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="input-pin"
+                      aria-describedby="pin-code"
+                      value={pin}
+                      onChange={(e) => setPin(e.target.value)}
+                    />
+
+                    <div className="mb-3">
+                      <label htmlFor="input-country" className="form-label">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="input-country"
+                        aria-describedby="country"
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* PAYMENT DETAILS */}
+          <div className="carousel-item">
+            <div className="card m-auto" style={{ maxWidth: "50rem" }}>
+              <div className="card-body">
+                <h5 class="card-title">Payment Details</h5>
+                <div className="mb-3">
+                  <label htmlFor="input-name-on-card" className="form-label">
+                    Name on card
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-name-on-card"
+                    aria-describedby="name on card"
+                    value={nameOnCard}
+                    onChange={(e) => setNameOnCard(e.target.value)}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-card" className="form-label">
+                    Card
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-card"
+                    aria-describedby="card"
+                    value={cardNo}
+                    onChange={(e) => setCardNo(e.target.value)}
+                  />
+                </div>
+
+                <div className="row mb-3">
+                  <div className="col">
+                    <label htmlFor="input-valid-from" className="form-label">
+                      Valid From
+                    </label>
+                    <input
+                      type="month"
+                      className="form-control"
+                      id="input-valid-from"
+                      aria-describedby="valid-from"
+                      value={validFrom}
+                      onChange={(e) => setValidFrom(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="col">
+                    <label htmlFor="input-valid-through" className="form-label">
+                      Valid Through
+                    </label>
+                    <input
+                      type="month"
+                      className="form-control"
+                      id="input-valid-through"
+                      aria-describedby="valid-from"
+                      value={validUpto}
+                      onChange={(e) => setValidUpto(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-cvv" className="form-label">
+                    CVV
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="input-cvv"
+                    aria-describedby="cvv"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="d-grid mx-auto mt-3" style={{ maxWidth: "50rem" }}>
+              <button
+                className="btn btn-primary btn-lg"
+                type="button"
+                onClick={() => {
+                  handleClick();
+                }}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="d-flex justify-content-center m-auto"
+          style={{ maxWidth: "50rem" }}
+        >
+          <button
+            className="btn - btn-primary m-5"
+            data-bs-target="#registration-form-carousel"
+            data-bs-slide="prev"
+          >
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="visually-hidden">Previous</span>
+          </button>
+
+          <button
+            className="btn - btn-primary m-5"
+            data-bs-target="#registration-form-carousel"
+            data-bs-slide="next"
+          >
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default RegistrationForm;

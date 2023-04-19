@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a string`,
     },
   },
+  authId: { type: String, required: true, unique: true },
   address: {
     house: String,
     street: String,
@@ -20,10 +21,10 @@ const userSchema = new mongoose.Schema({
   },
   payment: {
     nameOnCard: String,
-    cardNo: Number,
+    cardNo: String,
     validFrom: String,
     validUpto: String,
-    CVV: String,
+    cvv: String,
   },
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   updatedAt: { type: Date, default: () => Date.now() },

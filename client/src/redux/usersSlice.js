@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiEndPoints from "../assets/api_endpoints";
 
 const initialState = {
-  users: [],
+  users: {},
   status: "idle",
   error: null,
 };
@@ -29,10 +29,35 @@ export const createUsers = createAsyncThunk(
   }
 );
 
+export const getUsers = createAsyncThunk(
+  "users/getUsers",
+  async ({ authId, acessToken }) => {
+    try {
+      const response = await fetch(`${apiEndPoints.users}/${authId}`, {
+        headers: {
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
+
+      return json;
+    } catch (e) {
+      return e.messgae;
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser: (state) => {
+      state.status = "fulfilled ";
+      state.error = null;
+      state.users = {};
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(createUsers.fulfilled, (state, action) => {
@@ -43,8 +68,20 @@ const usersSlice = createSlice({
       })
       .addCase(createUsers.pending, (state, action) => {
         state.status = "pending";
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.users = action.payload;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.payload;
+      })
+      .addCase(getUsers.pending, (state, action) => {
+        state.status = "pending";
       });
   },
 });
 
+export const { resetUser } = usersSlice.actions;
 export default usersSlice.reducer;
