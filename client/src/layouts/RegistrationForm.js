@@ -11,7 +11,7 @@ import validateRegistrationForm from "../utils/validateRegistrationForm";
 function RegistrationForm() {
   const dispatch = useDispatch();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   const [name, setName] = useState();
   const [email, setEmail] = useState();
@@ -30,6 +30,7 @@ function RegistrationForm() {
     const userData = {
       name,
       email,
+      authId: user.sub,
       house,
       street,
       city,
