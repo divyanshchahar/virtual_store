@@ -16,7 +16,7 @@ function Routing() {
           <Route index element={<HomePage />} />
           <Route path="products/:productId" element={SingleProductPage} />
           <Route
-            path="user_registration"
+            path="account"
             element={<AuthenticationGuard component={AccountPage} />}
           />
           <Route path="cart" element={<CartPage />} />
