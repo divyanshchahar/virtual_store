@@ -2,12 +2,13 @@ function OrderedItemLayout({ processedData }) {
   return (
     <>
       {processedData.map((item) => {
+        // console.log(processedData);
         return (
           <div className="card mt-5 mx-3">
             {/* ORDER ID AND DATE */}
             <div className="card-header">
               <p>{`Order ID: ${item._id}`}</p>
-              <p>{`Ordered On: ${item.date.toDateString()}`}</p>
+              <p>{`Ordered On: ${Date(item.createdAt)}`}</p>
             </div>
 
             {/* PRODUCT DETAILS */}
