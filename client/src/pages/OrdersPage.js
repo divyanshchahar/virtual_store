@@ -9,6 +9,8 @@ import OrderedItemLayout from "../layouts/OrderedItemLayout";
 import { getOrdersApi } from "../redux/ordersSlice";
 import { useEffect } from "react";
 
+import NoOrdersLayout from "../layouts/NoOrdersLayout";
+
 const putOrder = {
   customerId: "64358dc3bc3d299a15ec28a4",
   products: [
@@ -22,27 +24,6 @@ const putOrder = {
     },
   ],
 };
-
-// const orders = [
-//   {
-//     _id: "oid1",
-//     customerId: "cid1",
-//     date: new Date("1-1-2023"),
-//     products: [
-//       { pId: "64254b41e4f8dae9211a1579", qty: 3 },
-//       { pId: "64254b41e4f8dae9211a1578", qty: 2 },
-//     ],
-//   },
-//   {
-//     _id: "oid2",
-//     customerId: "cid1",
-//     date: new Date("1-2-2023"),
-//     products: [
-//       { pId: "64254b41e4f8dae9211a1579", qty: 3 },
-//       { pId: "64254b41e4f8dae9211a1578", qty: 2 },
-//     ],
-//   },
-// ];
 
 function OrdersPage() {
   const selectedUser = useSelector((state) => state.users.users);
@@ -116,7 +97,12 @@ function OrdersPage() {
 
   return (
     <>
-      <OrderedItemLayout processedData={processedData} />
+      {orders.length > 0 ? (
+        <OrderedItemLayout processedData={processedData} />
+      ) : (
+        <NoOrdersLayout />
+      )}
+
       <button
         className="btn btn-primary"
         onClick={async () => {
@@ -137,6 +123,3 @@ function OrdersPage() {
 }
 
 export default OrdersPage;
-
-// TODO:
-// 1. Remove hardcoded values i.e. orders array
