@@ -4,6 +4,8 @@ import { createOrdersApi } from "../redux/ordersSlice";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
+import OrderedItemLayout from "../layouts/OrderedItemLayout";
+
 const putOrder = {
   customerId: "64358dc3bc3d299a15ec28a4",
   products: [
@@ -40,9 +42,10 @@ const orders = [
 ];
 
 function OrdersPage() {
-  let productIds = [];
-  let processedData = [];
+  let productIds = []; // to hold list of productIds in order
+  let processedData = []; // to hold final dataset
 
+  // populating productIds
   orders.forEach((item) => {
     item.products.map((productItem) => {
       productIds.push(productItem.pId);
@@ -53,10 +56,12 @@ function OrdersPage() {
     state.products.products.filter((item) => productIds.includes(item._id))
   );
 
+  // generating final dataset
   orders.forEach((orderItem) => {
-    const temp = { _id: orderItem._id, date: orderItem.date };
+    const temp = { _id: orderItem._id, date: orderItem.date }; // to hold a single instance of processed data
     const filteredProducts = [];
 
+    // generating product details for final dataset (adding product qty from orders to final dataset)
     orderItem.products.forEach((orderProductItem) => {
       product.map((productItem) => {
         if (productItem._id === orderProductItem.pId) {
@@ -64,7 +69,8 @@ function OrdersPage() {
         }
       });
     });
-    temp.products = filteredProducts;
+
+    temp.products = filteredProducts; // adding processed product data to an instance of processed data
     processedData.push(temp);
   });
 
@@ -74,45 +80,7 @@ function OrdersPage() {
 
   return (
     <>
-      {processedData.map((item) => {
-        return (
-          <div className="card mt-5 mx-3">
-            <div className="card-header">
-              <p>{`Order ID: ${item._id}`}</p>
-              <p>{`Ordered On: ${item.date.toDateString()}`}</p>
-            </div>
-            <div className="card-body">
-              {item.products.map((renderItem) => {
-                return (
-                  <div className="d-flex flex-wrap gap-5 mb-5 p-5">
-                    <img
-                      src={renderItem.images[0]}
-                      alt={renderItem.name}
-                      style={{ maxWidth: "25rem" }}
-                    />
-
-                    <div style={{ maxWidth: "55rem" }}>
-                      <h3>{renderItem.name}</h3>
-                      <p>{`Qty: $ ${renderItem.qty}`}</p>
-                      <h6>{`Price: $ ${renderItem.price}`}</h6>
-                      <h5>{`Subtotal: $ ${
-                        renderItem.price * renderItem.qty
-                      }`}</h5>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="card-footer">
-              <h6>
-                {`Total : $ ${item.products.reduce((total, totalItem) => {
-                  return total + totalItem.price * totalItem.qty;
-                }, 0)}`}
-              </h6>
-            </div>
-          </div>
-        );
-      })}
+      <OrderedItemLayout processedData={processedData} />
       <button
         className="btn btn-primary"
         onClick={async () => {
