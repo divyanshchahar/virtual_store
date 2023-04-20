@@ -11,49 +11,61 @@ import validateRegistrationForm from "../utils/validateRegistrationForm";
 function RegistrationForm() {
   const dispatch = useDispatch();
 
-  const selectedUser = useSelector((state) => state.users.users);
-
   const { getAccessTokenSilently, user, isAuthenticated, isLoading } =
     useAuth0();
 
-  const [name, setName] = useState(null || selectedUser.name);
-  const [email, setEmail] = useState(null || selectedUser.email);
-  const [house, setHouse] = useState(null || selectedUser.address.house);
-  const [street, setStreet] = useState(null || selectedUser.address.street);
-  const [city, setCity] = useState(null || selectedUser.address.city);
-  const [pin, setPin] = useState(null || selectedUser.address.pin);
-  const [country, setCountry] = useState(null || selectedUser.address.country);
-  const [nameOnCard, setNameOnCard] = useState(
-    null || selectedUser.payment.nameOnCard
-  );
-  const [cardNo, setCardNo] = useState(null || selectedUser.payment.cardNo);
-  const [validFrom, setValidFrom] = useState(
-    null || selectedUser.payment.validFrom
-  );
-  const [validUpto, setValidUpto] = useState(
-    null || selectedUser.payment.validUpto
-  );
-  const [cvv, setCvv] = useState(null || selectedUser.payment.cvv);
+  const selectedUser = useSelector((state) => state.users.users);
 
   useEffect(() => {
     const setUserOnPageLoad = async () => {
-      if (isAuthenticated && !isLoading) {
-        const acessToken = await getAccessTokenSilently({
-          authorizationParams: {
-            audience: process.env.REACT_APP_AUDIENCE,
-            scope: "write:users",
-          },
-        });
-
-        const authId = user.sub;
-        const data = { authId, acessToken };
-
-        dispatch(getUsers(data));
+      try {
+        if (isAuthenticated && !isLoading) {
+          const acessToken = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: process.env.REACT_APP_AUDIENCE,
+              scope: "write:users",
+            },
+          });
+          const authId = user.sub;
+          const data = { authId, acessToken };
+          dispatch(getUsers(data));
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
-
     setUserOnPageLoad();
-  }, [isAuthenticated, isLoading]);
+  }, [user]);
+
+  useEffect(() => {
+    if (Object.keys(selectedUser).length > 0) {
+      setName(selectedUser.name);
+      setEmail(selectedUser.email);
+      setHouse(selectedUser.address.house);
+      setStreet(selectedUser.address.street);
+      setCity(selectedUser.address.city);
+      setPin(selectedUser.address.pin);
+      setCountry(selectedUser.address.country);
+      setNameOnCard(selectedUser.payment.nameOnCard);
+      setCardNo(selectedUser.payment.cardNo);
+      setValidFrom(selectedUser.payment.validFrom);
+      setValidUpto(selectedUser.payment.validUpto);
+      setCvv(selectedUser.payment.cvv);
+    }
+  }, [selectedUser]);
+
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [house, setHouse] = useState();
+  const [street, setStreet] = useState();
+  const [city, setCity] = useState();
+  const [pin, setPin] = useState();
+  const [country, setCountry] = useState();
+  const [nameOnCard, setNameOnCard] = useState();
+  const [cardNo, setCardNo] = useState();
+  const [validFrom, setValidFrom] = useState();
+  const [validUpto, setValidUpto] = useState();
+  const [cvv, setCvv] = useState();
 
   const handleClick = async () => {
     const userData = {
