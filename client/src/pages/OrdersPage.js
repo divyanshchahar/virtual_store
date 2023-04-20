@@ -114,8 +114,6 @@ function OrdersPage() {
     processedData.push(temp);
   });
 
-  console.log(processedData);
-
   return (
     <>
       <OrderedItemLayout processedData={processedData} />
