@@ -29,11 +29,53 @@ export const createUsers = createAsyncThunk(
   }
 );
 
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async ({ userData, acessToken }) => {
+    try {
+      const response = await fetch(apiEndPoints.users, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${acessToken}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const json = await response.json();
+
+      return json;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 export const getUsers = createAsyncThunk(
   "users/getUsers",
   async ({ authId, acessToken }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${authId}`, {
+        headers: {
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
+
+      return json;
+    } catch (e) {
+      return e.messgae;
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async ({ id, acessToken }) => {
+    try {
+      const response = await fetch(`${apiEndPoints.users}/${id}`, {
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
@@ -78,6 +120,24 @@ const usersSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(getUsers.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "sucess";
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(updateUser.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.status = "sucess";
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(deleteUser.pending, (state, action) => {
         state.status = "pending";
       });
   },
