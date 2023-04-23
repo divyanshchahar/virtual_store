@@ -70,6 +70,26 @@ export const getUsers = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk(
+  "users/deleteUser",
+  async ({ id, acessToken }) => {
+    try {
+      const response = await fetch(`${apiEndPoints.users}/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
+
+      return json;
+    } catch (e) {
+      return e.messgae;
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -109,6 +129,15 @@ const usersSlice = createSlice({
         state.status = "rejected";
       })
       .addCase(updateUser.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.status = "sucess";
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(deleteUser.pending, (state, action) => {
         state.status = "pending";
       });
   },

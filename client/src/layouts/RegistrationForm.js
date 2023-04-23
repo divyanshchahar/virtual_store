@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { createUsers, getUsers, updateUser } from "../redux/usersSlice";
+import {
+  createUsers,
+  getUsers,
+  updateUser,
+  deleteUser,
+} from "../redux/usersSlice";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -11,7 +16,7 @@ import validateRegistrationForm from "../utils/validateRegistrationForm";
 function RegistrationForm() {
   const dispatch = useDispatch();
 
-  const { getAccessTokenSilently, user, isAuthenticated, isLoading } =
+  const { getAccessTokenSilently, logout, user, isAuthenticated, isLoading } =
     useAuth0();
 
   const selectedUser = useSelector((state) => state.users.users);
@@ -38,20 +43,22 @@ function RegistrationForm() {
   }, [user]);
 
   useEffect(() => {
-    if (Object.keys(selectedUser).length > 0) {
-      setName(selectedUser.name);
-      setEmail(selectedUser.email);
-      setHouse(selectedUser.address.house);
-      setStreet(selectedUser.address.street);
-      setCity(selectedUser.address.city);
-      setPin(selectedUser.address.pin);
-      setCountry(selectedUser.address.country);
-      setNameOnCard(selectedUser.payment.nameOnCard);
-      setCardNo(selectedUser.payment.cardNo);
-      setValidFrom(selectedUser.payment.validFrom);
-      setValidUpto(selectedUser.payment.validUpto);
-      setCvv(selectedUser.payment.cvv);
-    }
+    try {
+      if (Object.keys(selectedUser).length > 0) {
+        setName(selectedUser.name);
+        setEmail(selectedUser.email);
+        setHouse(selectedUser.address.house);
+        setStreet(selectedUser.address.street);
+        setCity(selectedUser.address.city);
+        setPin(selectedUser.address.pin);
+        setCountry(selectedUser.address.country);
+        setNameOnCard(selectedUser.payment.nameOnCard);
+        setCardNo(selectedUser.payment.cardNo);
+        setValidFrom(selectedUser.payment.validFrom);
+        setValidUpto(selectedUser.payment.validUpto);
+        setCvv(selectedUser.payment.cvv);
+      }
+    } catch (error) {}
   }, [selectedUser]);
 
   const [name, setName] = useState();
@@ -341,8 +348,11 @@ function RegistrationForm() {
               </div>
             </div>
 
-            <div className="d-grid mx-auto mt-3" style={{ maxWidth: "50rem" }}>
-              {Object.keys(selectedUser).length > 0 ? (
+            <div
+              className="d-grid mx-auto mt-3 gap-3"
+              style={{ maxWidth: "50rem" }}
+            >
+              {selectedUser?._id ? (
                 <button
                   className="btn btn-primary btn-lg"
                   type="button"
@@ -361,6 +371,34 @@ function RegistrationForm() {
                   }}
                 >
                   Register Details
+                </button>
+              )}
+
+              {selectedUser?._id && (
+                <button
+                  className="btn btn-primary btn-lg"
+                  type="button"
+                  onClick={async () => {
+                    const acessToken = await getAccessTokenSilently({
+                      authorizationParams: {
+                        audience: process.env.REACT_APP_AUDIENCE,
+                        scope: "write:users",
+                      },
+                    });
+
+                    const data = {
+                      id: selectedUser._id,
+                      acessToken: acessToken,
+                    };
+
+                    dispatch(deleteUser(data));
+
+                    logout({
+                      logoutParams: { returnTo: window.location.href },
+                    });
+                  }}
+                >
+                  Delete User
                 </button>
               )}
             </div>

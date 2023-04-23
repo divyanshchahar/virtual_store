@@ -1,5 +1,7 @@
 const express = require("express");
 const User = require("../schema/userSchema");
+const Cart = require("../schema/cartSchema");
+const Order = require("../schema/ordersSchema");
 
 const checkJwt = require("../middleware/checkJwt");
 const { checkUsersScopes } = require("../middleware/checkScopes");
@@ -40,6 +42,8 @@ router.route("/").put(checkJwt, checkUsersScopes, async (req, res) => {
 router.route("/:id").delete(checkJwt, checkUsersScopes, async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
+    const cart = await Cart.deleteMany({ customerId: req.params.id });
+    const orders = await Order.deleteMany({ customerId: req.params.id });
     res.status(200).send("deleted");
   } catch (e) {
     res.status(500).send(e.message);
