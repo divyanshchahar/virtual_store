@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { createUsers, getUsers } from "../redux/usersSlice";
+import { createUsers, getUsers, updateUser } from "../redux/usersSlice";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -67,7 +67,7 @@ function RegistrationForm() {
   const [validUpto, setValidUpto] = useState();
   const [cvv, setCvv] = useState();
 
-  const handleClick = async () => {
+  const registerUser = async () => {
     const userData = {
       name,
       email,
@@ -101,6 +101,44 @@ function RegistrationForm() {
       const data = { userData: userData, acessToken: acessToken };
 
       dispatch(createUsers(data));
+    }
+  };
+
+  const saveUser = async () => {
+    const userData = {
+      _id: selectedUser._id,
+      name,
+      email,
+      authId: user.sub,
+      address: {
+        house,
+        street,
+        city,
+        pin,
+        country,
+      },
+      payment: {
+        cardNo,
+        nameOnCard,
+        validFrom,
+        validUpto,
+        cvv,
+      },
+    };
+
+    const alertShown = validateRegistrationForm(userData);
+
+    if (!alertShown) {
+      const acessToken = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: process.env.REACT_APP_AUDIENCE,
+          scope: "write:users",
+        },
+      });
+
+      const data = { userData: userData, acessToken: acessToken };
+
+      dispatch(updateUser(data));
     }
   };
 
@@ -304,15 +342,27 @@ function RegistrationForm() {
             </div>
 
             <div className="d-grid mx-auto mt-3" style={{ maxWidth: "50rem" }}>
-              <button
-                className="btn btn-primary btn-lg"
-                type="button"
-                onClick={() => {
-                  handleClick();
-                }}
-              >
-                Submit
-              </button>
+              {Object.keys(selectedUser).length > 0 ? (
+                <button
+                  className="btn btn-primary btn-lg"
+                  type="button"
+                  onClick={() => {
+                    saveUser();
+                  }}
+                >
+                  Save Details
+                </button>
+              ) : (
+                <button
+                  className="btn btn-primary btn-lg"
+                  type="button"
+                  onClick={() => {
+                    registerUser();
+                  }}
+                >
+                  Register Details
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -31,7 +31,7 @@ router.route("/").put(checkJwt, checkUsersScopes, async (req, res) => {
       user[item[0]] = item[1];
     });
     await user.save();
-    res.status(200).send("Updated Sucessfully");
+    res.status(200).send(user);
   } catch (e) {
     res.status(500).send(e.message);
   }
