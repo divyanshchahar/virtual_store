@@ -21,14 +21,19 @@ function SingleProductPage() {
             style={{ width: "25rem" }}
           >
             <div className="carousel-inner">
-              {product.images.map((item) => {
-                return (
+              {product.images.map((item, index) => {
+                return index < 1 ? (
                   <div className="carousel-item active">
+                    <img src={item} className="d-block w-100" alt="..." />
+                  </div>
+                ) : (
+                  <div className="carousel-item">
                     <img src={item} className="d-block w-100" alt="..." />
                   </div>
                 );
               })}
             </div>
+
             <button
               className="carousel-control-prev"
               type="button"
