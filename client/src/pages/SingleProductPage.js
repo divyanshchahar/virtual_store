@@ -24,11 +24,21 @@ function SingleProductPage() {
               {product.images.map((item, index) => {
                 return index < 1 ? (
                   <div className="carousel-item active">
-                    <img src={item} className="d-block w-100" alt="..." />
+                    <img
+                      src={item}
+                      className="object-fit-contain"
+                      alt="..."
+                      style={{ width: "25rem", height: "25rem" }}
+                    />
                   </div>
                 ) : (
                   <div className="carousel-item">
-                    <img src={item} className="d-block w-100" alt="..." />
+                    <img
+                      src={item}
+                      className="object-fit-contain"
+                      alt="..."
+                      style={{ width: "25rem", height: "25rem" }}
+                    />
                   </div>
                 );
               })}
