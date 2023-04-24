@@ -42,16 +42,24 @@ function ProductsList() {
           {products.products.map((item) => {
             return (
               <div className="card" style={{ width: "15rem" }} key={item._id}>
-                <img
-                  src={item.images[0]}
-                  className="card-image-top"
-                  alt={`${item.name}`}
-                  onClick={() => {
-                    navigate(`products/${item._id}`);
-                  }}
-                />
+                <div className="ratio ratio-1x1">
+                  <img
+                    src={item.images[0]}
+                    className="card-image-top object-fit-contain"
+                    alt={`${item.name}`}
+                    onClick={() => {
+                      navigate(`products/${item._id}`);
+                    }}
+                  />
+                </div>
+
                 <div className="card-body">
-                  <p className="card-text">{item.name}</p>
+                  <p className="card-text">
+                    {item.name.length > 25
+                      ? `${item.name.substring(0, 20)}...`
+                      : item.name}
+                  </p>
+
                   <div className="btn-group">
                     <button className="btn btn-primary">Add to Cart</button>
                     <button className="btn btn-primary">Buy Now</button>

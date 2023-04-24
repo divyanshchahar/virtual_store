@@ -17,9 +17,10 @@ function OrderedItemLayout({ processedData }) {
                 return (
                   <div className="d-flex flex-wrap gap-5 mb-5 p-5">
                     <img
+                      className="object-fit-contain"
                       src={renderItem.images[0]}
                       alt={renderItem.name}
-                      style={{ maxWidth: "25rem" }}
+                      style={{ width: "25rem", maxHeight: "25rem" }}
                     />
 
                     <div style={{ maxWidth: "55rem" }}>

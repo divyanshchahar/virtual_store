@@ -24,7 +24,8 @@ function CartPage() {
             <div className="d-flex flex-wrap justify-content-start gap-5 border p-3">
               <img
                 src={item.images[0]}
-                style={{ maxWidth: "20rem" }}
+                style={{ width: "20rem", height: "20rem" }}
+                className="object-fit-contain"
                 alt={item.name}
               />
 
