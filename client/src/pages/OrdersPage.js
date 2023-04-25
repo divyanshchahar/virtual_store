@@ -11,20 +11,6 @@ import { useEffect } from "react";
 
 import NoOrdersLayout from "../layouts/NoOrdersLayout";
 
-const putOrder = {
-  customerId: "64358dc3bc3d299a15ec28a4",
-  products: [
-    {
-      productId: "64254b41e4f8dae9211a1579",
-      qty: 3,
-    },
-    {
-      productId: "64254b41e4f8dae9211a1578",
-      qty: 2,
-    },
-  ],
-};
-
 function OrdersPage() {
   const selectedUser = useSelector((state) => state.users.users);
   const orders = useSelector((state) => state.orders.orders);
@@ -64,12 +50,14 @@ function OrdersPage() {
   let filteredProductIds = []; // to hold list of productIds in order
   let processedData = []; // to hold final dataset
 
-  // populating productIds
-  orders.forEach((item) => {
-    item.products.map((productItem) => {
-      filteredProductIds.push(productItem.productId);
+  if (orders.length > 0) {
+    // populating productIds
+    orders.forEach((item) => {
+      item.products.map((productItem) => {
+        filteredProductIds.push(productItem.productId);
+      });
     });
-  });
+  }
 
   const product = useSelector((state) =>
     state.products.products.filter((item) =>
@@ -78,22 +66,25 @@ function OrdersPage() {
   );
 
   // generating final dataset
-  orders.forEach((orderItem) => {
-    const temp = { _id: orderItem._id, createdAt: orderItem.createdAt }; // to hold a single instance of processed data
-    const filteredProducts = [];
-
-    // generating product details for final dataset (adding product qty from orders to final dataset)
-    orderItem.products.forEach((orderProductItem) => {
-      product.map((productItem) => {
-        if (productItem._id === orderProductItem.productId) {
-          filteredProducts.push({ ...productItem, qty: orderProductItem.qty });
-        }
+  if (orders.length > 0) {
+    orders.forEach((orderItem) => {
+      const temp = { _id: orderItem._id, createdAt: orderItem.createdAt }; // to hold a single instance of processed data
+      const filteredProducts = [];
+      // generating product details for final dataset (adding product qty from orders to final dataset)
+      orderItem.products.forEach((orderProductItem) => {
+        product.map((productItem) => {
+          if (productItem._id === orderProductItem.productId) {
+            filteredProducts.push({
+              ...productItem,
+              qty: orderProductItem.qty,
+            });
+          }
+        });
       });
+      temp.products = filteredProducts; // adding processed product data to an instance of processed data
+      processedData.push(temp);
     });
-
-    temp.products = filteredProducts; // adding processed product data to an instance of processed data
-    processedData.push(temp);
-  });
+  }
 
   return (
     <>
@@ -102,22 +93,6 @@ function OrdersPage() {
       ) : (
         <NoOrdersLayout />
       )}
-
-      <button
-        className="btn btn-primary"
-        onClick={async () => {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:orders",
-            },
-          });
-          const data = { orderData: putOrder, acesstoken: acessToken };
-          dispatch(createOrdersApi(data));
-        }}
-      >
-        Buy Now
-      </button>
     </>
   );
 }
