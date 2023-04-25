@@ -6,11 +6,13 @@ import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import productsReducer from "./productsSlice";
 import ordersReducer from "./ordersSlice";
 import usersSlice from "./usersSlice";
+import cartSlice from "./cartSlice";
 
 const rootReducer = combineReducers({
   products: productsReducer,
   orders: ordersReducer,
   users: usersSlice,
+  cart: cartSlice,
 });
 
 const persistConfig = {

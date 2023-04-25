@@ -24,7 +24,7 @@ root.render(
             authorizationParams={{
               redirect_uri: window.location.href,
               audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:orders write:users",
+              scope: "write:orders write:users write:carts",
             }}
           >
             <App />
