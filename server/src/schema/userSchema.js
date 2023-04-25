@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a string`,
     },
   },
-  hasCart: { type: Boolean, default: false },
   authId: { type: String, required: true, unique: true },
   address: {
     house: String,
