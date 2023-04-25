@@ -70,7 +70,7 @@ function ProductsList() {
 
   const addToCart = async (productId) => {
     // user loggedin and registered
-    if (selectedUser._id) {
+    if (selectedUser?._id) {
       const acessToken = await getAccessTokenSilently({
         authorizationParams: {
           audience: process.env.REACT_APP_AUDIENCE,
@@ -79,7 +79,7 @@ function ProductsList() {
       });
 
       // if user has a cart
-      if (cart) {
+      if (typeof cart === "object") {
         const itemPresent = cart.products.filter(
           (item) => item.productId === productId
         );
@@ -128,7 +128,7 @@ function ProductsList() {
   };
 
   const removeFromCart = async (productId) => {
-    if (selectedUser._id) {
+    if (selectedUser?._id) {
       if (cart) {
         const [isProduct] = cart.products.filter(
           (item) => item.productId === productId
