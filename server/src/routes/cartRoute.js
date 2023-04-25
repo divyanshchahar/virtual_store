@@ -6,6 +6,17 @@ const { checkCartScopes } = require("../middleware/checkScopes");
 
 const router = express.Router();
 
+router
+  .route("/:customerId")
+  .get(checkJwt, checkCartScopes, async (req, res) => {
+    try {
+      const [cart] = await Cart.find({ customerId: req.params.customerId });
+      res.status(200).send(cart);
+    } catch (e) {
+      res.status(500).send(e.message);
+    }
+  });
+
 router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
   try {
     const cart = await Cart.create(req.body);
