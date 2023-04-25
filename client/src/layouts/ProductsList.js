@@ -79,7 +79,7 @@ function ProductsList() {
       });
 
       // if user has a cart
-      if (typeof cart === "object" && cart?.products?.length > 0) {
+      if (typeof cart === "object") {
         const itemPresent = cart.products.filter(
           (item) => item.productId === productId
         );
