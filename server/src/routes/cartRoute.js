@@ -19,7 +19,12 @@ router
 
 router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
   try {
-    const cart = await Cart.create(req.body);
+    const data = {
+      customerId: req.body.customerId,
+      products: [{ productId: req.body.productId, qty: req.body.qty }],
+    };
+
+    const cart = await Cart.create(data);
     res.status(200).send(cart);
   } catch (e) {
     res.status(500).send(e.message);
