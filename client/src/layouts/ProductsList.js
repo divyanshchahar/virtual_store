@@ -41,7 +41,11 @@ function ProductsList() {
         <div className="container d-flex justify-content-around flex-wrap gap-3 p-3">
           {products.products.map((item) => {
             return (
-              <div className="card" style={{ width: "15rem" }} key={item._id}>
+              <div
+                className="card text-center"
+                style={{ width: "15rem" }}
+                key={item._id}
+              >
                 <div className="ratio ratio-1x1">
                   <img
                     src={item.images[0]}
@@ -61,8 +65,12 @@ function ProductsList() {
                   </p>
 
                   <div className="btn-group">
-                    <button className="btn btn-primary">Add to Cart</button>
-                    <button className="btn btn-primary">Buy Now</button>
+                    <button className="btn btn-primary">
+                      <i class="bi bi-bag-plus"></i>
+                    </button>
+                    <button className="btn btn-primary">
+                      <i class="bi bi-bag-dash"></i>
+                    </button>
                   </div>
                 </div>
               </div>
