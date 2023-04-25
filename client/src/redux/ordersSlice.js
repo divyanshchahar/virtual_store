@@ -37,7 +37,7 @@ export const getOrdersApi = createAsyncThunk(
         },
       });
 
-      const json = response.json();
+      const json = await response.json();
 
       return json;
     } catch (e) {
