@@ -53,7 +53,7 @@ export const updateUserApi = createAsyncThunk(
 
 export const getUsersApi = createAsyncThunk(
   "users/getUsersApi",
-  async ({ authId, acessToken }) => {
+  async ({ acessToken, authId }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${authId}`, {
         headers: {
