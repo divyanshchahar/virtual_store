@@ -3,12 +3,13 @@ import { getCartApi, updateCartApi } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
+import NoItemsLayout from "../layouts/NoItemsLayout";
 
 function CartPage() {
   const cart = useSelector((state) => state.cart.cart);
   const selectedUser = useSelector((state) => state.users.users);
 
-  const productIds = cart.products.map((item) => item.productId);
+  const productIds = cart?.products?.map((item) => item.productId) || [];
 
   const products = useSelector((state) =>
     state.products.products.filter((item) => productIds.includes(item._id))
@@ -18,6 +19,7 @@ function CartPage() {
     useAuth0();
   const dispatch = useDispatch();
 
+  // loading user details on render
   useEffect(() => {
     const setUserOnPageLoad = async () => {
       try {
@@ -39,6 +41,7 @@ function CartPage() {
     setUserOnPageLoad();
   }, [user]);
 
+  // loading cart on render
   useEffect(() => {
     const setCartOnPageLoad = async () => {
       try {
@@ -63,6 +66,7 @@ function CartPage() {
     setCartOnPageLoad();
   }, [selectedUser]);
 
+  // function to add items to cart (PUT request)
   const addToCart = async (productId) => {
     const [itemPresent] = cart.products.filter(
       (item) => item.productId === productId
@@ -87,6 +91,7 @@ function CartPage() {
     dispatch(updateCartApi(data));
   };
 
+  // function to remove items from cart (PUT request)
   const removeFromCart = async (productId) => {
     const [itemPresent] = cart.products.filter(
       (item) => item.productId === productId
@@ -113,7 +118,7 @@ function CartPage() {
 
   return (
     <>
-      {cart.products.length > 0 ? (
+      {cart?.products?.length > 0 ? (
         <>
           <h1 className="text-center mt-5">Cart</h1>
           {products.map((item) => {
@@ -193,7 +198,7 @@ function CartPage() {
           </div>
         </>
       ) : (
-        <h1>Your Cart is Empty</h1>
+        <NoItemsLayout />
       )}
     </>
   );
