@@ -394,7 +394,7 @@ function RegistrationForm() {
                     dispatch(deleteUserApi(data));
 
                     logout({
-                      logoutParams: { returnTo: window.location.href },
+                      logoutParams: { returnTo: window.location.origin },
                     });
                   }}
                 >

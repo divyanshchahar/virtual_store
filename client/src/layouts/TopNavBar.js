@@ -78,7 +78,7 @@ function TopNavBar() {
                       dispatch(resetOrders());
 
                       logout({
-                        logoutParams: { returnTo: window.location.href },
+                        logoutParams: { returnTo: window.location.origin },
                       });
                     }}
                   >
