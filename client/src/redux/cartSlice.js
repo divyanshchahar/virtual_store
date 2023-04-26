@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiEndPoints from "../assets/api_endpoints";
 
 const initialState = {
-  cart: [],
+  cart: {},
   status: "idle",
   error: null,
 };
