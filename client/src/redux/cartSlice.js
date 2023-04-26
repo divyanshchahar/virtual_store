@@ -17,9 +17,12 @@ export const getCartApi = createAsyncThunk(
         },
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.message;
     }
@@ -38,8 +41,13 @@ export const createCartApi = createAsyncThunk(
         },
         body: JSON.stringify(cartData),
       });
-      const json = await response.json();
-      return json;
+
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
+
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.message;
     }
@@ -58,8 +66,13 @@ export const updateCartApi = createAsyncThunk(
         },
         body: JSON.stringify(cartData),
       });
-      const json = await response.json();
-      return json;
+
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
+
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.message;
     }
@@ -80,9 +93,15 @@ const cartSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getCartApi.fulfilled, (state, action) => {
-        state.status = "fullfilled";
-        state.cart = action.payload;
-        state.error = null;
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.cart = {};
+          state.error = action.payload;
+        } else {
+          state.status = "sucess";
+          state.cart = action.payload;
+          state.error = null;
+        }
       })
       .addCase(getCartApi.pending, (state, action) => {
         state.status = "pending";
@@ -93,9 +112,15 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(createCartApi.fulfilled, (state, action) => {
-        state.status = "fullfilled";
-        state.cart = action.payload;
-        state.error = null;
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.cart = {};
+          state.error = action.payload;
+        } else {
+          state.status = "sucess";
+          state.cart = action.payload;
+          state.error = null;
+        }
       })
       .addCase(createCartApi.pending, (state, action) => {
         state.status = "pending";
@@ -106,9 +131,15 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(updateCartApi.fulfilled, (state, action) => {
-        state.status = "fullfilled";
-        state.cart = action.payload;
-        state.error = null;
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.cart = {};
+          state.error = action.payload;
+        } else {
+          state.status = "sucess";
+          state.cart = action.payload;
+          state.error = null;
+        }
       })
       .addCase(updateCartApi.pending, (state, action) => {
         state.status = "pending";
