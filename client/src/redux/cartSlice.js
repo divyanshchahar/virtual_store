@@ -11,7 +11,7 @@ export const getCartApi = createAsyncThunk(
   "cart/getCartApi",
   async ({ acessToken, customerId }) => {
     try {
-      const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
+      const response = await fetch(`${apiEndPoints.cart}/${customerId}`, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
@@ -30,7 +30,7 @@ export const createCartApi = createAsyncThunk(
   "cart/createCartApi",
   async ({ acessToken, cartData }) => {
     try {
-      const response = await fetch(apiEndPoints.orders, {
+      const response = await fetch(apiEndPoints.cart, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const updateCartApi = createAsyncThunk(
   "cart/updateCartApi",
   async ({ acessToken, cartData }) => {
     try {
-      const response = await fetch(apiEndPoints.orders, {
+      const response = await fetch(apiEndPoints.cart, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
