@@ -1,4 +1,4 @@
-import { getUsers } from "../redux/usersSlice";
+import { getUsersApi } from "../redux/usersSlice";
 import { getCartApi, updateCartApi } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -30,7 +30,7 @@ function CartPage() {
           });
           const authId = user.sub;
           const data = { authId, acessToken };
-          dispatch(getUsers(data));
+          dispatch(getUsersApi(data));
         }
       } catch (error) {
         console.log(error);

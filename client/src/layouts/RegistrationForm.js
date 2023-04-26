@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import {
-  createUsers,
-  getUsers,
-  updateUser,
-  deleteUser,
+  createUsersApi,
+  getUsersApi,
+  updateUserApi,
+  deleteUserApi,
 } from "../redux/usersSlice";
 
 import { useAuth0 } from "@auth0/auth0-react";
@@ -33,7 +33,7 @@ function RegistrationForm() {
           });
           const authId = user.sub;
           const data = { authId, acessToken };
-          dispatch(getUsers(data));
+          dispatch(getUsersApi(data));
         }
       } catch (error) {
         console.log(error);
@@ -107,7 +107,7 @@ function RegistrationForm() {
 
       const data = { userData: userData, acessToken: acessToken };
 
-      dispatch(createUsers(data));
+      dispatch(createUsersApi(data));
     }
   };
 
@@ -145,7 +145,7 @@ function RegistrationForm() {
 
       const data = { userData: userData, acessToken: acessToken };
 
-      dispatch(updateUser(data));
+      dispatch(updateUserApi(data));
     }
   };
 
@@ -391,7 +391,7 @@ function RegistrationForm() {
                       acessToken: acessToken,
                     };
 
-                    dispatch(deleteUser(data));
+                    dispatch(deleteUserApi(data));
 
                     logout({
                       logoutParams: { returnTo: window.location.href },

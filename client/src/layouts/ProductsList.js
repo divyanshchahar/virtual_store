@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getProductsApi } from "../redux/productsSlice";
-import { getUsers } from "../redux/usersSlice";
+import { getUsersApi } from "../redux/usersSlice";
 import { getCartApi, createCartApi, updateCartApi } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -34,7 +34,7 @@ function ProductsList() {
           const authId = user.sub;
           const data = { authId, acessToken };
 
-          dispatch(getUsers(data));
+          dispatch(getUsersApi(data));
         }
       } catch (error) {
         console.log(error);

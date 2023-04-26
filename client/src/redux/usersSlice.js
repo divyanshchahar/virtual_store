@@ -7,8 +7,8 @@ const initialState = {
   error: null,
 };
 
-export const createUsers = createAsyncThunk(
-  "users/createUsers",
+export const createUsersApi = createAsyncThunk(
+  "users/createUsersApi",
   async ({ userData, acessToken }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
@@ -29,8 +29,8 @@ export const createUsers = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
-  "user/updateUser",
+export const updateUserApi = createAsyncThunk(
+  "user/updateUserApi",
   async ({ userData, acessToken }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
@@ -51,8 +51,8 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const getUsers = createAsyncThunk(
-  "users/getUsers",
+export const getUsersApi = createAsyncThunk(
+  "users/getUsersApi",
   async ({ authId, acessToken }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${authId}`, {
@@ -70,8 +70,8 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
-  "users/deleteUser",
+export const deleteUserApi = createAsyncThunk(
+  "users/deleteUserApi",
   async ({ id, acessToken }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${id}`, {
@@ -102,42 +102,42 @@ const usersSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(createUsers.fulfilled, (state, action) => {
+      .addCase(createUsersApi.fulfilled, (state, action) => {
         state.status = "sucess";
       })
-      .addCase(createUsers.rejected, (state, action) => {
+      .addCase(createUsersApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(createUsers.pending, (state, action) => {
+      .addCase(createUsersApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(getUsers.fulfilled, (state, action) => {
+      .addCase(getUsersApi.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.users = action.payload;
       })
-      .addCase(getUsers.rejected, (state, action) => {
+      .addCase(getUsersApi.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
       })
-      .addCase(getUsers.pending, (state, action) => {
+      .addCase(getUsersApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUserApi.fulfilled, (state, action) => {
         state.status = "sucess";
       })
-      .addCase(updateUser.rejected, (state, action) => {
+      .addCase(updateUserApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(updateUser.pending, (state, action) => {
+      .addCase(updateUserApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteUserApi.fulfilled, (state, action) => {
         state.status = "sucess";
       })
-      .addCase(deleteUser.rejected, (state, action) => {
+      .addCase(deleteUserApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(deleteUser.pending, (state, action) => {
+      .addCase(deleteUserApi.pending, (state, action) => {
         state.status = "pending";
       });
   },
