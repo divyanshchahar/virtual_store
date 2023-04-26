@@ -30,9 +30,8 @@ function RegistrationForm() {
               scope: "write:users",
             },
           });
-          const authId = user.sub;
-          const data = { authId, acessToken };
-          dispatch(getUsersApi(data));
+
+          dispatch(getUsersApi({ authId: user.sub, acessToken: acessToken }));
         }
       } catch (error) {
         console.log(error);
