@@ -16,5 +16,5 @@ app.use(express.json());
 
 app.use("/products", productsRouter);
 app.use("/users", userRouter);
-app.use("/carts", cartRouter);
+app.use("/cart", cartRouter);
 app.use("/orders", ordersRouter);

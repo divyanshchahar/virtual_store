@@ -11,6 +11,7 @@ router
   .get(checkJwt, checkCartScopes, async (req, res) => {
     try {
       const [cart] = await Cart.find({ customerId: req.params.customerId });
+      console.log("cart");
       res.status(200).send(cart);
     } catch (e) {
       res.status(500).send(e.message);
