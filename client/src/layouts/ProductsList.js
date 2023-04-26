@@ -36,10 +36,7 @@ function ProductsList() {
             },
           });
 
-          const authId = user.sub;
-          const data = { authId, acessToken };
-
-          dispatch(getUsersApi(data));
+          dispatch(getUsersApi({ authId: user?.sub, acessToken: acessToken }));
         }
       } catch (error) {
         console.log(error);
@@ -53,7 +50,7 @@ function ProductsList() {
   useEffect(() => {
     const setCartOnPageLoad = async () => {
       try {
-        if (selectedUser._id) {
+        if (selectedUser?._id) {
           const acessToken = await getAccessTokenSilently({
             authorizationParams: {
               audience: process.env.REACT_APP_AUDIENCE,
@@ -61,10 +58,12 @@ function ProductsList() {
             },
           });
 
-          const customerId = selectedUser._id;
-          const data = { acessToken, customerId };
-
-          dispatch(getCartApi(data));
+          dispatch(
+            getCartApi({
+              acessToken: acessToken,
+              customerId: selectedUser?._id,
+            })
+          );
         }
       } catch (error) {
         console.log(error);
