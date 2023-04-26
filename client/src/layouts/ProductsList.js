@@ -218,7 +218,7 @@ function ProductsList() {
                         addToCart(item._id);
                       }}
                     >
-                      <i class="bi bi-bag-plus"></i>
+                      <i classname="bi bi-bag-plus"></i>
                     </button>
                     <button
                       className="btn btn-primary"
@@ -226,7 +226,7 @@ function ProductsList() {
                         removeFromCart(item._id);
                       }}
                     >
-                      <i class="bi bi-bag-dash"></i>
+                      <i classname="bi bi-bag-dash"></i>
                     </button>
                   </div>
                 </div>

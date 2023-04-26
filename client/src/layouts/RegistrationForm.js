@@ -161,7 +161,7 @@ function RegistrationForm() {
           <div className="carousel-item active">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
-                <h5 class="card-title">User Details</h5>
+                <h5 classname="card-title">User Details</h5>
                 <div className="mb-3">
                   <label htmlFor="input-name" className="form-label">
                     Your Name
@@ -196,7 +196,7 @@ function RegistrationForm() {
           <div className="carousel-item">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
-                <h5 class="card-title">Address</h5>
+                <h5 classname="card-title">Address</h5>
                 <div className="mb-3">
                   <label htmlFor="input-house-number" className="form-label">
                     House/Apartment No
@@ -273,7 +273,7 @@ function RegistrationForm() {
           <div className="carousel-item">
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
-                <h5 class="card-title">Payment Details</h5>
+                <h5 classname="card-title">Payment Details</h5>
                 <div className="mb-3">
                   <label htmlFor="input-name-on-card" className="form-label">
                     Name on card
