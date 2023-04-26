@@ -2,7 +2,7 @@ const apiEndPoints = {
   products: "/products",
   orders: "orders",
   users: "users",
-  orders: "carts",
+  carts: "carts",
 };
 
 export default apiEndPoints;
