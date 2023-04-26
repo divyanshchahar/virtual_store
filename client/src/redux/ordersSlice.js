@@ -49,7 +49,14 @@ export const getOrdersApi = createAsyncThunk(
 const ordersSlice = createSlice({
   name: "orders",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrders: (state) => {
+      state.status = "fulfilled";
+      state.error = null;
+      state.orders = [];
+    },
+  },
+
   extraReducers(builder) {
     builder
       .addCase(createOrdersApi.fulfilled, (state, action) => {
@@ -79,4 +86,5 @@ const ordersSlice = createSlice({
   },
 });
 
+export const { resetOrders } = ordersSlice.actions;
 export default ordersSlice.reducer;
