@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../redux/productsSlice";
-import { getUsers } from "../redux/usersSlice";
+import { getProductsApi } from "../redux/productsSlice";
+import { getUsersApi } from "../redux/usersSlice";
 import { getCartApi, createCartApi, updateCartApi } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import ErrorLayout from "./ErrorLayout";
+import LoadingLayout from "./LoadingLayout";
+import NoItemsLayout from "./NoItemsLayout";
 
 function ProductsList() {
   const dispatch = useDispatch();
@@ -16,10 +19,12 @@ function ProductsList() {
   const selectedUser = useSelector((state) => state.users.users);
   const cart = useSelector((state) => state.cart.cart);
 
+  // rendering products on page load
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(getProductsApi());
   }, []);
 
+  // setting user state(global) on page load
   useEffect(() => {
     const setUserOnPageLoad = async () => {
       try {
@@ -31,10 +36,7 @@ function ProductsList() {
             },
           });
 
-          const authId = user.sub;
-          const data = { authId, acessToken };
-
-          dispatch(getUsers(data));
+          dispatch(getUsersApi({ authId: user?.sub, acessToken: acessToken }));
         }
       } catch (error) {
         console.log(error);
@@ -44,10 +46,11 @@ function ProductsList() {
     setUserOnPageLoad();
   }, [user]);
 
+  // setting cart state (global) on page load
   useEffect(() => {
     const setCartOnPageLoad = async () => {
       try {
-        if (selectedUser._id) {
+        if (selectedUser?._id) {
           const acessToken = await getAccessTokenSilently({
             authorizationParams: {
               audience: process.env.REACT_APP_AUDIENCE,
@@ -55,10 +58,12 @@ function ProductsList() {
             },
           });
 
-          const customerId = selectedUser._id;
-          const data = { acessToken, customerId };
-
-          dispatch(getCartApi(data));
+          dispatch(
+            getCartApi({
+              acessToken: acessToken,
+              customerId: selectedUser?._id,
+            })
+          );
         }
       } catch (error) {
         console.log(error);
@@ -68,6 +73,7 @@ function ProductsList() {
     setCartOnPageLoad();
   }, [selectedUser]);
 
+  // function to add items to cart
   const addToCart = async (productId) => {
     // user loggedin and registered
     if (selectedUser?._id) {
@@ -127,6 +133,7 @@ function ProductsList() {
     }
   };
 
+  // function to remove items from cart
   const removeFromCart = async (productId) => {
     if (selectedUser?._id) {
       if (cart) {
@@ -164,25 +171,11 @@ function ProductsList() {
 
   return (
     <>
-      {products.status === "idle" && (
-        <div className="container m-auto my-5">
-          <h1>No products to display</h1>
-        </div>
-      )}
+      {products.status === "idle" && <NoItemsLayout />}
 
-      {products.status === "pending" && (
-        <div className="container m-auto my-5" style={{ width: "fit-content" }}>
-          <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      )}
+      {products.status === "pending" && <LoadingLayout />}
 
-      {products.status === "rejected" && (
-        <div className="container m-auto my-5">
-          <h3>{products.error}</h3>
-        </div>
-      )}
+      {products.status === "rejected" && <ErrorLayout />}
 
       {products.status === "sucess" && (
         <div className="container d-flex justify-content-around flex-wrap gap-3 p-3">
@@ -193,16 +186,15 @@ function ProductsList() {
                 style={{ width: "15rem" }}
                 key={item._id}
               >
-                <div className="ratio ratio-1x1">
-                  <img
-                    src={item.images[0]}
-                    className="card-image-top object-fit-contain"
-                    alt={`${item.name}`}
-                    onClick={() => {
-                      navigate(`products/${item._id}`);
-                    }}
-                  />
-                </div>
+                <img
+                  src={item.images[0]}
+                  className="card-image-top object-fit-contain"
+                  alt={`${item.name}`}
+                  style={{ maxHeight: "15rem" }}
+                  onClick={() => {
+                    navigate(`products/${item._id}`);
+                  }}
+                />
 
                 <div className="card-body">
                   <p className="card-text">

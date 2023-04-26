@@ -13,7 +13,7 @@ router
       const [cart] = await Cart.find({ customerId: req.params.customerId });
       res.status(200).send(cart);
     } catch (e) {
-      res.status(500).send(e.message);
+      res.status(404);
     }
   });
 
@@ -25,7 +25,7 @@ router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
     };
 
     const cart = await Cart.create(data);
-    res.status(200).send(cart);
+    res.status(201).send(cart);
   } catch (e) {
     res.status(500).send(e.message);
   }

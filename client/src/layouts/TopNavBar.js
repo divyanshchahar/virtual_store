@@ -27,9 +27,9 @@ function TopNavBar() {
             }}
           >
             <i className="bi bi-cart-fill" style={{ fontSize: "2rem" }} />
-            <span class="position-absolute top-25 start-50  badge rounded-pill bg-danger">
+            <span className="position-absolute top-25 start-50  badge rounded-pill bg-danger">
               99+
-              <span class="visually-hidden">unread messages</span>
+              <span classame="visually-hidden">unread messages</span>
             </span>
           </button>
 
@@ -78,7 +78,7 @@ function TopNavBar() {
                       dispatch(resetOrders());
 
                       logout({
-                        logoutParams: { returnTo: window.location.href },
+                        logoutParams: { returnTo: window.location.origin },
                       });
                     }}
                   >

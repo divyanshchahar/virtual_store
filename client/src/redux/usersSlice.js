@@ -7,9 +7,9 @@ const initialState = {
   error: null,
 };
 
-export const createUsers = createAsyncThunk(
-  "users/createUsers",
-  async ({ userData, acessToken }) => {
+export const createUsersApi = createAsyncThunk(
+  "users/createUsersApi",
+  async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
         method: "POST",
@@ -20,18 +20,21 @@ export const createUsers = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (error) {
       return error.message;
     }
   }
 );
 
-export const updateUser = createAsyncThunk(
-  "user/updateUser",
-  async ({ userData, acessToken }) => {
+export const updateUserApi = createAsyncThunk(
+  "user/updateUserApi",
+  async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
         method: "PUT",
@@ -42,18 +45,21 @@ export const updateUser = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (error) {
       return error.message;
     }
   }
 );
 
-export const getUsers = createAsyncThunk(
-  "users/getUsers",
-  async ({ authId, acessToken }) => {
+export const getUsersApi = createAsyncThunk(
+  "users/getUsersApi",
+  async ({ acessToken, authId }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${authId}`, {
         headers: {
@@ -61,18 +67,21 @@ export const getUsers = createAsyncThunk(
         },
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.messgae;
     }
   }
 );
 
-export const deleteUser = createAsyncThunk(
-  "users/deleteUser",
-  async ({ id, acessToken }) => {
+export const deleteUserApi = createAsyncThunk(
+  "users/deleteUserApi",
+  async ({ acessToken, id }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${id}`, {
         method: "DELETE",
@@ -102,42 +111,59 @@ const usersSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(createUsers.fulfilled, (state, action) => {
-        state.status = "sucess";
+      .addCase(createUsersApi.fulfilled, (state, action) => {
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
-      .addCase(createUsers.rejected, (state, action) => {
+      .addCase(createUsersApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(createUsers.pending, (state, action) => {
+      .addCase(createUsersApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(getUsers.fulfilled, (state, action) => {
-        state.status = "fulfilled";
-        state.users = action.payload;
+      .addCase(getUsersApi.fulfilled, (state, action) => {
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
-      .addCase(getUsers.rejected, (state, action) => {
+      .addCase(getUsersApi.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
       })
-      .addCase(getUsers.pending, (state, action) => {
+      .addCase(getUsersApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.status = "sucess";
+      .addCase(updateUserApi.fulfilled, (state, action) => {
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
-      .addCase(updateUser.rejected, (state, action) => {
+      .addCase(updateUserApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(updateUser.pending, (state, action) => {
+      .addCase(updateUserApi.pending, (state, action) => {
         state.status = "pending";
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteUserApi.fulfilled, (state, action) => {
         state.status = "sucess";
       })
-      .addCase(deleteUser.rejected, (state, action) => {
+      .addCase(deleteUserApi.rejected, (state, action) => {
         state.status = "rejected";
       })
-      .addCase(deleteUser.pending, (state, action) => {
+      .addCase(deleteUserApi.pending, (state, action) => {
         state.status = "pending";
       });
   },

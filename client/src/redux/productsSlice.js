@@ -7,13 +7,18 @@ const initialState = {
   error: null,
 };
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
+export const getProductsApi = createAsyncThunk(
+  "products/getProductsApi",
   async () => {
     try {
       const response = await fetch(apiEndPoints.products);
-      const json = await response.json();
-      return json;
+
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
+
+      throw new Error("Something went wrong");
     } catch (error) {
       return error.message;
     }
@@ -26,15 +31,20 @@ const productsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.status = "sucess";
-        state.products = action.payload;
+      .addCase(getProductsApi.fulfilled, (state, action) => {
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.products = [];
+        } else {
+          state.status = "sucess";
+          state.products = action.payload;
+        }
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(getProductsApi.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload;
       })
-      .addCase(fetchProducts.pending, (state, action) => {
+      .addCase(getProductsApi.pending, (state, action) => {
         state.status = "pending";
       });
   },
