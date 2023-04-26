@@ -69,7 +69,14 @@ export const updateCartApi = createAsyncThunk(
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducer: {},
+  reducers: {
+    resetCart: (state) => {
+      state.status = "fullfilled";
+      state.error = null;
+      state.cart = [];
+    },
+  },
+
   extraReducers(builder) {
     builder
       .addCase(getCartApi.fulfilled, (state, action) => {
@@ -114,4 +121,5 @@ const cartSlice = createSlice({
   },
 });
 
+export const { resetCart } = cartSlice.actions;
 export default cartSlice.reducer;
