@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const createOrdersApi = createAsyncThunk(
-  "orders/fetchOrders",
+  "orders/createOrdersApi",
   async ({ orderData, acesstoken }) => {
     try {
       const response = await fetch(apiEndPoints.orders, {
@@ -28,7 +28,7 @@ export const createOrdersApi = createAsyncThunk(
 );
 
 export const getOrdersApi = createAsyncThunk(
-  "orders/getOrders",
+  "orders/getOrdersApi",
   async ({ customerId, acesstoken }) => {
     try {
       const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
