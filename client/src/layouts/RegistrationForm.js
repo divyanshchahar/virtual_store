@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
-
 import {
   createUsersApi,
   getUsersApi,
   updateUserApi,
   deleteUserApi,
+  resetUser,
 } from "../redux/usersSlice";
-
+import { resetCart } from "../redux/cartSlice";
+import { resetOrders } from "../redux/ordersSlice";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 
 function RegistrationForm() {
   const dispatch = useDispatch();
-
   const { getAccessTokenSilently, logout, user, isAuthenticated, isLoading } =
     useAuth0();
 
   const selectedUser = useSelector((state) => state.users.users);
 
+  // loading user on page load
   useEffect(() => {
     const setUserOnPageLoad = async () => {
       try {
@@ -42,6 +41,7 @@ function RegistrationForm() {
     setUserOnPageLoad();
   }, [user]);
 
+  // populating form
   useEffect(() => {
     try {
       if (Object.keys(selectedUser).length > 0) {
@@ -74,27 +74,28 @@ function RegistrationForm() {
   const [validUpto, setValidUpto] = useState();
   const [cvv, setCvv] = useState();
 
-  const registerUser = async () => {
-    const userData = {
-      name,
-      email,
-      authId: user.sub,
-      address: {
-        house,
-        street,
-        city,
-        pin,
-        country,
-      },
-      payment: {
-        cardNo,
-        nameOnCard,
-        validFrom,
-        validUpto,
-        cvv,
-      },
-    };
+  const userData = {
+    name,
+    email,
+    authId: user.sub,
+    address: {
+      house,
+      street,
+      city,
+      pin,
+      country,
+    },
+    payment: {
+      cardNo,
+      nameOnCard,
+      validFrom,
+      validUpto,
+      cvv,
+    },
+  };
 
+  // function to register new user (POST request)
+  const registerUser = async () => {
     const alertShown = validateRegistrationForm(userData);
 
     if (!alertShown) {
@@ -105,34 +106,12 @@ function RegistrationForm() {
         },
       });
 
-      const data = { userData: userData, acessToken: acessToken };
-
-      dispatch(createUsersApi(data));
+      dispatch(createUsersApi({ acessToken: acessToken, userData: userData }));
     }
   };
 
-  const saveUser = async () => {
-    const userData = {
-      _id: selectedUser._id,
-      name,
-      email,
-      authId: user.sub,
-      address: {
-        house,
-        street,
-        city,
-        pin,
-        country,
-      },
-      payment: {
-        cardNo,
-        nameOnCard,
-        validFrom,
-        validUpto,
-        cvv,
-      },
-    };
-
+  // function to update user (PUT request)
+  const updateUser = async () => {
     const alertShown = validateRegistrationForm(userData);
 
     if (!alertShown) {
@@ -143,10 +122,33 @@ function RegistrationForm() {
         },
       });
 
-      const data = { userData: userData, acessToken: acessToken };
-
-      dispatch(updateUserApi(data));
+      dispatch(updateUserApi({ acessToken: acessToken, userData: userData }));
     }
+  };
+
+  // function to execute delete operation (DELETE request)
+  const deleteUser = async () => {
+    const acessToken = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: "write:users",
+      },
+    });
+
+    dispatch(
+      deleteUserApi({
+        acessToken: acessToken,
+        id: selectedUser._id,
+      })
+    );
+
+    dispatch(resetCart());
+    dispatch(resetOrders());
+    dispatch(resetUser());
+
+    logout({
+      logoutParams: { returnTo: window.location.origin },
+    });
   };
 
   return (
@@ -357,10 +359,10 @@ function RegistrationForm() {
                   className="btn btn-primary btn-lg"
                   type="button"
                   onClick={() => {
-                    saveUser();
+                    updateUser();
                   }}
                 >
-                  Save Details
+                  Update Details
                 </button>
               ) : (
                 <button
@@ -378,24 +380,8 @@ function RegistrationForm() {
                 <button
                   className="btn btn-primary btn-lg"
                   type="button"
-                  onClick={async () => {
-                    const acessToken = await getAccessTokenSilently({
-                      authorizationParams: {
-                        audience: process.env.REACT_APP_AUDIENCE,
-                        scope: "write:users",
-                      },
-                    });
-
-                    const data = {
-                      id: selectedUser._id,
-                      acessToken: acessToken,
-                    };
-
-                    dispatch(deleteUserApi(data));
-
-                    logout({
-                      logoutParams: { returnTo: window.location.origin },
-                    });
+                  onClick={() => {
+                    deleteUser();
                   }}
                 >
                   Delete User
