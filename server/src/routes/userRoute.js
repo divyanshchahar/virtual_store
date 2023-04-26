@@ -28,7 +28,7 @@ router.route("/").post(checkJwt, checkUsersScopes, async (req, res) => {
 
 router.route("/").put(checkJwt, checkUsersScopes, async (req, res) => {
   try {
-    const user = await User.findById(req.body._id);
+    const [user] = await User.find({ authId: req.body.authId });
     Object.entries(req.body).forEach((item) => {
       user[item[0]] = item[1];
     });
