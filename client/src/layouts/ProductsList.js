@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../redux/productsSlice";
+import { getProductsApi } from "../redux/productsSlice";
 import { getUsers } from "../redux/usersSlice";
 import { getCartApi, createCartApi, updateCartApi } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ function ProductsList() {
   const cart = useSelector((state) => state.cart.cart);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(getProductsApi());
   }, []);
 
   useEffect(() => {
