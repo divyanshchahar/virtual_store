@@ -9,7 +9,7 @@ const initialState = {
 
 export const createUsersApi = createAsyncThunk(
   "users/createUsersApi",
-  async ({ userData, acessToken }) => {
+  async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
         method: "POST",
@@ -31,7 +31,7 @@ export const createUsersApi = createAsyncThunk(
 
 export const updateUserApi = createAsyncThunk(
   "user/updateUserApi",
-  async ({ userData, acessToken }) => {
+  async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
         method: "PUT",
@@ -72,7 +72,7 @@ export const getUsersApi = createAsyncThunk(
 
 export const deleteUserApi = createAsyncThunk(
   "users/deleteUserApi",
-  async ({ id, acessToken }) => {
+  async ({ acessToken, id }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${id}`, {
         method: "DELETE",
