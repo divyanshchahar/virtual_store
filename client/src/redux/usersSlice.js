@@ -20,9 +20,12 @@ export const createUsersApi = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (error) {
       return error.message;
     }
@@ -42,9 +45,12 @@ export const updateUserApi = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (error) {
       return error.message;
     }
@@ -61,9 +67,12 @@ export const getUsersApi = createAsyncThunk(
         },
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.messgae;
     }
@@ -103,7 +112,13 @@ const usersSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(createUsersApi.fulfilled, (state, action) => {
-        state.status = "sucess";
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
       .addCase(createUsersApi.rejected, (state, action) => {
         state.status = "rejected";
@@ -112,8 +127,13 @@ const usersSlice = createSlice({
         state.status = "pending";
       })
       .addCase(getUsersApi.fulfilled, (state, action) => {
-        state.status = "fulfilled";
-        state.users = action.payload;
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
       .addCase(getUsersApi.rejected, (state, action) => {
         state.status = "rejected";
@@ -123,7 +143,13 @@ const usersSlice = createSlice({
         state.status = "pending";
       })
       .addCase(updateUserApi.fulfilled, (state, action) => {
-        state.status = "sucess";
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.users = {};
+        } else {
+          state.status = "sucess";
+          state.users = action.payload;
+        }
       })
       .addCase(updateUserApi.rejected, (state, action) => {
         state.status = "rejected";
