@@ -13,8 +13,8 @@ const Products = mongoose.model("products", ProductSchema);
 
 router.route("/").get(async (req, res) => {
   try {
-    const result = await Products.find();
-    res.status(200).json(result);
+    const products = await Products.find();
+    res.status(200).send(products);
   } catch (e) {
     res.status(500).send(e.message);
   }
