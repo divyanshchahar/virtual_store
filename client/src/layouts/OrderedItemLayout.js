@@ -2,7 +2,6 @@ function OrderedItemLayout({ processedData }) {
   return (
     <>
       {processedData.map((item) => {
-        // console.log(processedData);
         return (
           <div className="card mt-5 mx-3">
             {/* ORDER ID AND DATE */}
