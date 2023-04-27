@@ -1,9 +1,9 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import React from "react";
+import LoadingLayout from "../layouts/LoadingLayout";
 
 export const AuthenticationGuard = ({ component }) => {
   const Component = withAuthenticationRequired(component, {
-    onRedirecting: () => <h1>Loading</h1>,
+    onRedirecting: () => <LoadingLayout />,
   });
 
   return <Component />;
