@@ -86,7 +86,7 @@ const cartSlice = createSlice({
     resetCart: (state) => {
       state.status = "fullfilled";
       state.error = null;
-      state.cart = [];
+      state.cart = {};
     },
   },
 
