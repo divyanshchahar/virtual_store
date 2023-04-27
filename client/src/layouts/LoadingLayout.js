@@ -1,5 +1,3 @@
-import React from "react";
-
 function LoadingLayout() {
   return (
     <div class="d-flex justify-content-center">
