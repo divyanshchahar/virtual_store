@@ -197,7 +197,7 @@ function CartPage() {
                           addToCart(item._id);
                         }}
                       >
-                        +
+                        <i class="bi bi-bag-plus"></i>
                       </button>
                       <button
                         className="btn btn-primary"
@@ -205,7 +205,7 @@ function CartPage() {
                           removeFromCart(item._id);
                         }}
                       >
-                        -
+                        <i class="bi bi-bag-dash"></i>
                       </button>
                     </div>
 
