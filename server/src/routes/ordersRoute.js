@@ -22,7 +22,6 @@ router
 router.route("/").post(checkJwt, checkOrdersScopes, async (req, res) => {
   try {
     const orders = await Orders.create(req.body);
-    console.log(orders);
     res.status(200).send("order placed sucessfully");
   } catch (e) {
     res.status(500).send(e.mesage);
