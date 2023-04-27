@@ -1,5 +1,6 @@
 import { getUsersApi } from "../redux/usersSlice";
 import { getCartApi, updateCartApi } from "../redux/cartSlice";
+import { createOrdersApi } from "../redux/ordersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
@@ -116,6 +117,50 @@ function CartPage() {
     dispatch(updateCartApi(data));
   };
 
+  // funtion to place orders
+  const createOrder = async () => {
+    //placing orders
+
+    const acessTokenOrder = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: "write:orders",
+      },
+    });
+
+    const orderData = {
+      customerId: selectedUser._id,
+      products: cart.products.map((item) => {
+        return { productId: item.productId, qty: item.qty };
+      }),
+    };
+
+    dispatch(
+      createOrdersApi({ orderData: orderData, acesstoken: acessTokenOrder })
+    );
+
+    //emptying cart
+
+    const acessTokenCart = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: process.env.REACT_APP_AUDIENCE,
+        scope: "write:carts",
+      },
+    });
+
+    orderData.products.forEach((item) => {
+      const cartData = {
+        customerId: selectedUser._id,
+        productId: item.productId,
+        qty: 0,
+      };
+
+      dispatch(
+        updateCartApi({ acessToken: acessTokenCart, cartData: cartData })
+      );
+    });
+  };
+
   return (
     <>
       {cart?.products?.length > 0 ? (
@@ -195,6 +240,17 @@ function CartPage() {
                 );
               }, 0)}`}</h5>
             </div>
+          </div>
+          <div className="d-grid p-3">
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => {
+                createOrder();
+              }}
+            >
+              {" "}
+              Buy Now
+            </button>
           </div>
         </>
       ) : (
