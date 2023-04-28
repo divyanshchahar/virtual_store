@@ -14,9 +14,9 @@ function TopNavBar() {
     <nav className="navbar navbar-expand-md bg-body-tertiary">
       <div className="container-fluid">
         {/* BRANDING */}
-        <a className="navbar-brand" href="#">
-          Navbar
-        </a>
+        <Link className="navbar-brand" to="/">
+          <i class="bi bi-shop" style={{ fontSize: "2rem" }}></i>
+        </Link>
 
         {/* BUTTON GROUP`` */}
         <div className="order-md-last">

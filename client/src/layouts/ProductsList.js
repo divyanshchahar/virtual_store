@@ -92,16 +92,15 @@ function ProductsList() {
 
         // if item is availible in cart
         if (itemPresent.length > 0) {
-          const data = {
-            acessToken: acessToken,
-            cartData: {
-              customerId: selectedUser._id,
-              productId: productId,
-              qty: itemPresent[0].qty + 1,
-            },
+          const cartData = {
+            customerId: selectedUser._id,
+            productId: productId,
+            qty: itemPresent[0].qty + 1,
           };
 
-          dispatch(updateCartApi(data));
+          dispatch(
+            updateCartApi({ acessToken: acessToken, cartData: cartData })
+          );
         } else {
           // put request with qty:1
 
@@ -117,16 +116,13 @@ function ProductsList() {
           dispatch(updateCartApi(data));
         }
       } else {
-        const data = {
-          acessToken: acessToken,
-          cartData: {
-            customerId: selectedUser._id,
-            productId: productId,
-            qty: 1,
-          },
+        const cartData = {
+          customerId: selectedUser._id,
+          productId: productId,
+          qty: 1,
         };
 
-        dispatch(createCartApi(data));
+        dispatch(createCartApi({ acessToken: acessToken, cartData: cartData }));
       }
     } else {
       alert("Please login and register user details");
@@ -149,15 +145,15 @@ function ProductsList() {
             },
           });
 
-          const data = {
-            acessToken: acessToken,
-            cartData: {
-              customerId: selectedUser._id,
-              productId: productId,
-              qty: isProduct.qty - 1,
-            },
+          const cartData = {
+            customerId: selectedUser._id,
+            productId: productId,
+            qty: isProduct.qty - 1,
           };
-          dispatch(updateCartApi(data));
+
+          dispatch(
+            updateCartApi({ acessToken: acessToken, cartData: cartData })
+          );
         } else {
           alert("This product does not exists in cart");
         }
@@ -190,7 +186,7 @@ function ProductsList() {
                   src={item.images[0]}
                   className="card-image-top object-fit-contain"
                   alt={`${item.name}`}
-                  style={{ maxHeight: "15rem" }}
+                  style={{ height: "15rem" }}
                   onClick={() => {
                     navigate(`products/${item._id}`);
                   }}

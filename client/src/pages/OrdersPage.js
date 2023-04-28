@@ -1,24 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
-
-import { createOrdersApi } from "../redux/ordersSlice";
-
-import { useAuth0 } from "@auth0/auth0-react";
-
-import OrderedItemLayout from "../layouts/OrderedItemLayout";
-
 import { getOrdersApi } from "../redux/ordersSlice";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-
 import NoOrdersLayout from "../layouts/NoOrdersLayout";
+import OrderedItemLayout from "../layouts/OrderedItemLayout";
 
 function OrdersPage() {
   const selectedUser = useSelector((state) => state.users.users);
   const orders = useSelector((state) => state.orders.orders);
 
   const dispatch = useDispatch();
-
   const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
 
+  // getting cart on render
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -30,14 +24,12 @@ function OrdersPage() {
             },
           });
 
-          const data = {
-            customerId: selectedUser._id,
-            acesstoken: acessToken,
-          };
-
-          console.log(data);
-
-          dispatch(getOrdersApi(data));
+          dispatch(
+            getOrdersApi({
+              acessToken: acessToken,
+              customerId: selectedUser._id,
+            })
+          );
         }
       } catch (error) {
         console.log(error);
@@ -48,8 +40,8 @@ function OrdersPage() {
   }, []);
 
   let filteredProductIds = []; // to hold list of productIds in order
-  let processedData = []; // to hold final dataset
 
+  let processedData = []; // to hold final dataset
   if (orders.length > 0) {
     // populating productIds
     orders.forEach((item) => {

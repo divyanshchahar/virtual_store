@@ -8,13 +8,12 @@ function SingleProductPage() {
     state.products.products.find((item) => item._id === productId)
   );
 
-  console.log(Object.entries(product));
-
   return (
     <>
       <div className="container p-5">
         <div className="d-flex justify-content-center flex-wrap gap-5">
           {/* IMAGE CAROUSEL */}
+
           <div
             id="carouselExample"
             className="carousel slide"
@@ -69,7 +68,9 @@ function SingleProductPage() {
               <span className="visually-hidden">Next</span>
             </button>
           </div>
+
           {/* PRODUCT DETAILS */}
+
           <div>
             <h3>{product.name}</h3>
             {Object.entries(product).map((item) => {
@@ -87,10 +88,6 @@ function SingleProductPage() {
             <div className="btn-group">
               <button className="btn btn-primary">Add to Cart</button>
               <button className="btn btn-primary">Remove from Cart</button>
-            </div>
-
-            <div className="mt-2">
-              <button className="btn btn-primary">Buy Now</button>
             </div>
           </div>
         </div>

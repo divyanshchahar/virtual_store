@@ -9,13 +9,13 @@ const initialState = {
 
 export const createOrdersApi = createAsyncThunk(
   "orders/createOrdersApi",
-  async ({ orderData, acesstoken }) => {
+  async ({ acessToken, orderData }) => {
     try {
       const response = await fetch(apiEndPoints.orders, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${acesstoken}`,
+          Authorization: `Bearer ${acessToken}`,
         },
         body: JSON.stringify(orderData),
       });
@@ -29,17 +29,20 @@ export const createOrdersApi = createAsyncThunk(
 
 export const getOrdersApi = createAsyncThunk(
   "orders/getOrdersApi",
-  async ({ customerId, acesstoken }) => {
+  async ({ acessToken, customerId }) => {
     try {
       const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
         headers: {
-          Authorization: `Bearer ${acesstoken}`,
+          Authorization: `Bearer ${acessToken}`,
         },
       });
 
-      const json = await response.json();
+      if (response.ok) {
+        const json = await response.json();
+        return json;
+      }
 
-      return json;
+      throw new Error("Something went wrong");
     } catch (e) {
       return e.message;
     }
@@ -60,7 +63,13 @@ const ordersSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(createOrdersApi.fulfilled, (state, action) => {
-        state.status = "fullfilled";
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.orders = [];
+        } else {
+          state.status = "sucess";
+          state.orders = action.payload;
+        }
       })
       .addCase(createOrdersApi.rejected, (state, action) => {
         state.status = "rejected";
@@ -69,9 +78,13 @@ const ordersSlice = createSlice({
         state.status = "pending";
       })
       .addCase(getOrdersApi.fulfilled, (state, action) => {
-        state.status = "fullfilled";
-        state.orders = action.payload;
-        state.error = null;
+        if (action.payload === "Something went wrong") {
+          state.status = "rejected";
+          state.orders = [];
+        } else {
+          state.status = "sucess";
+          state.orders = action.payload;
+        }
       })
       .addCase(getOrdersApi.rejected, (state, action) => {
         state.status = "rejected";
