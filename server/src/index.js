@@ -10,7 +10,7 @@ const ordersRouter = require("./routes/ordersRoute");
 const app = express();
 
 const corsOption = {
-  origin: "http://localhost:3000",
+  origin: process.env.ORIGIN,
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
 };
