@@ -248,7 +248,6 @@ function CartPage() {
                 createOrder();
               }}
             >
-              {" "}
               Buy Now
             </button>
           </div>
