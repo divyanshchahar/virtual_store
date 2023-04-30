@@ -15,7 +15,7 @@ const corsOption = {
   credentials: true,
 };
 
-mongoose.connect("mongodb://localhost/virtual_store");
+mongoose.connect(process.env.DATABASE);
 
 app.use(express.json());
 app.use(cors(corsOption));
