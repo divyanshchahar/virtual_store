@@ -42,7 +42,8 @@ function OrdersPage() {
   let filteredProductIds = []; // to hold list of productIds in order
 
   let processedData = []; // to hold final dataset
-  if (orders.length > 0) {
+
+  if (orders.length > 0 && typeof orders === "object") {
     // populating productIds
     orders.forEach((item) => {
       item.products.map((productItem) => {
@@ -58,7 +59,7 @@ function OrdersPage() {
   );
 
   // generating final dataset
-  if (orders.length > 0) {
+  if (orders.length > 0 && typeof orders === "object") {
     orders.forEach((orderItem) => {
       const temp = { _id: orderItem._id, createdAt: orderItem.createdAt }; // to hold a single instance of processed data
       const filteredProducts = [];
