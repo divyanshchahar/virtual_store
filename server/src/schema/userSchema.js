@@ -11,7 +11,10 @@ const userSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a string`,
     },
   },
-  authId: { type: String, required: true, unique: true },
+  password: {
+    type: String,
+    required: true,
+  },
   address: {
     house: String,
     street: String,
