@@ -6,6 +6,8 @@ const productsRouter = require("./routes/productsRoute");
 const userRouter = require("./routes/userRoute");
 const cartRouter = require("./routes/cartRoute");
 const ordersRouter = require("./routes/ordersRoute");
+const signUpRouter = require("./routes/signUpRoute");
+const loginRouter = require("./routes/loginRoute");
 
 const app = express();
 
@@ -24,5 +26,6 @@ app.use("/products", productsRouter);
 app.use("/users", userRouter);
 app.use("/cart", cartRouter);
 app.use("/orders", ordersRouter);
+app.use("/signup", signUpRouter);
 
 app.listen(3200);
