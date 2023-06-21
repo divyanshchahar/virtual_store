@@ -9,6 +9,7 @@ const ordersRouter = require("./routes/ordersRoute");
 const signUpRouter = require("./routes/signUpRoute");
 const loginRouter = require("./routes/loginRoute");
 const refreshTokenRouter = require("./routes/refreshTokenRoute");
+const logoutRouter = require("./routes/logoutRoute");
 
 require("dotenv").config();
 
@@ -32,5 +33,6 @@ app.use("/orders", ordersRouter);
 app.use("/signup", signUpRouter);
 app.use("/login", loginRouter);
 app.use("/refreshToken", refreshTokenRouter);
+app.use("/logout", logoutRouter);
 
 app.listen(3200);
