@@ -4509,13 +4509,6 @@ expect@^29.0.0:
     jest-message-util "^29.5.0"
     jest-util "^29.5.0"
 
-express-oauth2-jwt-bearer@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/express-oauth2-jwt-bearer/-/express-oauth2-jwt-bearer-1.4.0.tgz#9514f7a208badcfbe63e2687a42ad1cb6083ef33"
-  integrity sha512-UPwiVAhKifjtclSJSbRkHbDtZcROuV6CKASpA0BmqFNCWjNonGEbxDaAv5e21lFBpSHevkVaw0JVRB7b/7Dbtg==
-  dependencies:
-    jose "^4.13.1"
-
 express@^4.17.3, express@^4.18.2:
   version "4.18.2"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
@@ -6127,11 +6120,6 @@ jest@^27.4.3:
     "@jest/core" "^27.5.1"
     import-local "^3.0.2"
     jest-cli "^27.5.1"
-
-jose@^4.13.1:
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/jose/-/jose-4.13.1.tgz#449111bb5ab171db85c03f1bd2cb1647ca06db1c"
-  integrity sha512-MSJQC5vXco5Br38mzaQKiq9mwt7lwj2eXpgpRyQYNHYt2lq1PjkWa7DLXX0WVcQLE9HhMh3jPiufS7fhJf+CLQ==
 
 js-sdsl@^4.1.4:
   version "4.4.0"
