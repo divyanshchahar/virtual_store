@@ -9,6 +9,8 @@ const ordersRouter = require("./routes/ordersRoute");
 const signUpRouter = require("./routes/signUpRoute");
 const loginRouter = require("./routes/loginRoute");
 
+require("dotenv").config();
+
 const app = express();
 
 const corsOption = {
@@ -27,5 +29,6 @@ app.use("/users", userRouter);
 app.use("/cart", cartRouter);
 app.use("/orders", ordersRouter);
 app.use("/signup", signUpRouter);
+app.use("/login", loginRouter);
 
 app.listen(3200);
