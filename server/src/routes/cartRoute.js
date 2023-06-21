@@ -1,23 +1,18 @@
 const express = require("express");
 const Cart = require("../schema/cartSchema");
 
-const checkJwt = require("../middleware/checkJwt");
-const { checkCartScopes } = require("../middleware/checkScopes");
-
 const router = express.Router();
 
-router
-  .route("/:customerId")
-  .get(checkJwt, checkCartScopes, async (req, res) => {
-    try {
-      const [cart] = await Cart.find({ customerId: req.params.customerId });
-      res.status(200).send(cart);
-    } catch (e) {
-      res.status(404);
-    }
-  });
+router.route("/:customerId").get(async (req, res) => {
+  try {
+    const [cart] = await Cart.find({ customerId: req.params.customerId });
+    res.status(200).send(cart);
+  } catch (e) {
+    res.status(404);
+  }
+});
 
-router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
+router.route("/").post(async (req, res) => {
   try {
     const data = {
       customerId: req.body.customerId,
@@ -31,7 +26,7 @@ router.route("/").post(checkJwt, checkCartScopes, async (req, res) => {
   }
 });
 
-router.route("/").put(checkJwt, checkCartScopes, async (req, res) => {
+router.route("/").put(async (req, res) => {
   try {
     let itemNotPresent = true;
 
