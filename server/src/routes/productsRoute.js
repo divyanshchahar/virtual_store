@@ -1,15 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const Products = require("../schema/productSchema");
 
 const router = express.Router();
-
-const ProductSchema = new mongoose.Schema({
-  name: String,
-  price: Number,
-  images: [String],
-});
-
-const Products = mongoose.model("products", ProductSchema);
 
 router.route("/").get(async (req, res) => {
   try {
@@ -20,9 +12,9 @@ router.route("/").get(async (req, res) => {
   }
 });
 
-router.route("/:id").get(async (req, res) => {
+router.route("/:productId").get(async (req, res) => {
   try {
-    const result = await Products.findById(req.params.id);
+    const result = await Products.findById(req.params.productId);
     res.status(200).json(result);
   } catch (e) {
     res.status(500).send(e.message);

@@ -6,19 +6,24 @@ const router = express.Router();
 
 router.route("/:customerId").get(async (req, res) => {
   try {
+    if (!req.params.customerId) return res.sendStatus(400);
+
     const orders = await Orders.find({ customerId: req.params.customerId });
+
+    if (!orders) return res.sendStatus(404);
+
     res.status(200).send(orders);
-  } catch (e) {
-    res.status(500).send(e.mesage);
+  } catch (error) {
+    res.status(500).send(error.mesage);
   }
 });
 
 router.route("/").post(async (req, res) => {
   try {
     const orders = await Orders.create(req.body);
-    res.status(200).send("order placed sucessfully");
-  } catch (e) {
-    res.status(500).send(e.mesage);
+    res.send(orders).status(200);
+  } catch (error) {
+    res.status(500).send(error.mesage);
   }
 });
 
