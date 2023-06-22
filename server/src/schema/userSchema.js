@@ -6,28 +6,54 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator: (v) => typeof v === "string",
-      message: (props) => `${props.value} is not a string`,
-    },
   },
   password: {
     type: String,
     required: true,
   },
   address: {
-    house: String,
-    street: String,
-    city: String,
-    pin: String,
-    country: String,
+    house: {
+      type: String,
+      required: true,
+    },
+    street: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    pin: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
   },
   payment: {
-    nameOnCard: String,
-    cardNo: String,
-    validFrom: String,
-    validUpto: String,
-    cvv: String,
+    nameOnCard: {
+      type: String,
+      required: true,
+    },
+    cardNo: {
+      type: String,
+      required: true,
+    },
+    validFrom: {
+      type: String,
+      required: true,
+    },
+    validUpto: {
+      type: String,
+      required: true,
+    },
+    cvv: {
+      type: String,
+      required: true,
+    },
   },
   createdAt: { type: Date, default: () => Date.now(), immutable: true },
   updatedAt: { type: Date, default: () => Date.now() },
