@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   },
-  payment: {
+  payments: {
     nameOnCard: {
       type: String,
       required: true,
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
     cvv: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
