@@ -19,12 +19,8 @@ router.route("/").post(async (req, res) => {
       (error, decoded) => {
         if (error) return res.sendStatus(403);
 
-        const user = User.findById(decoded.name);
-
-        if (!user) return res.sendStatus(404);
-
         const acessToken = jwt.sign(
-          { id: user._id },
+          { id: decoded.id.toString() },
           process.env.ACESS_TOKEN_SECRET,
           {
             expiresIn: "15m",
