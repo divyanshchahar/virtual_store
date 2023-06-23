@@ -16,13 +16,13 @@ router.route("/").post(async (req, res) => {
     const user = await User.create(hashedUser);
 
     const acessToken = jwt.sign(
-      { id: user._id },
+      { id: user._id.toString() },
       process.env.ACESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
 
     const refreshToken = jwt.sign(
-      { id: user._id },
+      { id: user._id.toString() },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: "1d",
