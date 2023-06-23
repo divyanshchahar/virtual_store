@@ -2,14 +2,13 @@ const express = require("express");
 const Cart = require("../schema/cartSchema");
 const User = require("../schema/userSchema");
 const Product = require("../schema/productSchema");
+const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 
 const router = express.Router();
 
-router.route("/:customerId").get(async (req, res) => {
+router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.params.customerId) return res.sendStatus(400);
-
-    const [cart] = await Cart.find({ customerId: req.params.customerId });
+    const [cart] = await Cart.find({ customerId: req.id });
 
     if (!cart) return res.sendStatus(404);
 
@@ -19,17 +18,16 @@ router.route("/:customerId").get(async (req, res) => {
   }
 });
 
-router.route("/").post(async (req, res) => {
+router.route("/").post(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.body.customerId || !req.body.productId) return res.sendStatus(400);
+    if (!req.body.productId) return res.sendStatus(400);
 
-    const isUser = await User.findById(req.body.customerId);
     const isProduct = await Product.findById(req.body.productId);
 
-    if (!isUser || !isProduct) return res.sendStatus(404);
+    if (!isProduct) return res.sendStatus(404);
 
     const cart = await Cart.create({
-      customerId: null || req.body.customerId,
+      customerId: null || req.id,
       products: [
         { productId: null || req.body.productId, qty: null || req.body.qty },
       ],
@@ -41,16 +39,18 @@ router.route("/").post(async (req, res) => {
   }
 });
 
-router.route("/").put(async (req, res) => {
+router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
     let itemNotPresent = true;
+    let isQty = false;
 
-    if (!req.body.customerId || !req.body.productId || !req.body.qty)
-      return res.sendStatus(400);
+    if (req?.body?.qty || req?.body?.qty === 0) isQty = true;
 
-    const isCustomer = User.findById(req.body.customerId);
-    const isProduct = User.findById(req.body.productId);
-    const [cart] = await Cart.find({ customerId: req.body.customerId });
+    if (!req.body.productId || !isQty) return res.sendStatus(400);
+
+    const isCustomer = await User.findById(req.id);
+    const isProduct = await Product.findById(req.body.productId);
+    const [cart] = await Cart.find({ customerId: req.id });
 
     if (!isCustomer || !isProduct || !cart) return res.sendStatus(404);
 
