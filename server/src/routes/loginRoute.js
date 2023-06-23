@@ -20,7 +20,7 @@ router.route("/").post(async (req, res) => {
 
     if (isAuthenticatd) {
       const acessToken = jwt.sign(
-        { email: req.body.email },
+        { id: user._id.toString() },
         process.env.ACESS_TOKEN_SECRET,
         {
           expiresIn: "15m",
@@ -28,7 +28,7 @@ router.route("/").post(async (req, res) => {
       );
 
       const refreshToken = jwt.sign(
-        { email: req.body.email },
+        { id: user._id.toString() },
         process.env.REFRESH_TOKEN_SECRET,
         {
           expiresIn: "15d",

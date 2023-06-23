@@ -1,16 +1,15 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../schema/userSchema");
-const Cart = require("../schema/cartSchema");
-const Order = require("../schema/ordersSchema");
+// const Cart = require("../schema/cartSchema");
+// const Order = require("../schema/ordersSchema");
+const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 
 const router = express.Router();
 
-router.route("/:userId").get(async (req, res) => {
+router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.params.userId) return res.sendStatus(400);
-
-    const user = await User.findById(req.params.userId);
+    const user = await User.findById(req.id);
 
     if (!user) return res.sendStatus(404);
 
@@ -20,20 +19,9 @@ router.route("/:userId").get(async (req, res) => {
   }
 });
 
-// router.route("/").post(async (req, res) => {
-//   try {
-//     const user = await User.create(req.body);
-//     res.status(200).send(user._id);
-//   } catch (e) {
-//     res.status(500).send(e.message);
-//   }
-// });
-
-router.route("/").put(async (req, res) => {
+router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.body._id) return res.sendStatus(400);
-
-    const user = await User.findById(req.body._id);
+    const user = await User.findById(req.id);
 
     if (!user) return res.sendStatus(404);
 
@@ -57,22 +45,20 @@ router.route("/").put(async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    res.status(500).send(error.message);
+    res.sendStatus(500).send(error.message);
   }
 });
 
-router.route("/:userId").delete(async (req, res) => {
+router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.params.userId) return res.sendStatus(400);
-
-    const isDeleted = await User.findByIdAndDelete(req.params.userId);
+    const isDeleted = await User.findByIdAndDelete(req.id);
 
     if (!isDeleted) return res.sendStatus(400);
     // const cart = await Cart.deleteMany({ customerId: req.params.id });
     // const orders = await Order.deleteMany({ customerId: req.params.id });
     res.sendStatus(200);
-  } catch (e) {
-    res.status(500).send(e.message);
+  } catch (error) {
+    res.sendStatus(500).send(error.message);
   }
 });
 
