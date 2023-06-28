@@ -7,8 +7,8 @@ const initialState = {
   error: null,
 };
 
-export const getCartApi = createAsyncThunk(
-  "cart/getCartApi",
+export const cartGetRequest = createAsyncThunk(
+  "cart/cartGetRequest",
   async ({ acessToken, customerId }) => {
     try {
       const response = await fetch(`${apiEndPoints.cart}/${customerId}`, {
@@ -29,8 +29,8 @@ export const getCartApi = createAsyncThunk(
   }
 );
 
-export const createCartApi = createAsyncThunk(
-  "cart/createCartApi",
+export const cartPostRequest = createAsyncThunk(
+  "cart/cartPostRequest",
   async ({ acessToken, cartData }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
@@ -42,20 +42,17 @@ export const createCartApi = createAsyncThunk(
         body: JSON.stringify(cartData),
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
+      const json = response.json();
 
-      throw new Error("Something went wrong");
-    } catch (e) {
-      return e.message;
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
     }
   }
 );
 
-export const updateCartApi = createAsyncThunk(
-  "cart/updateCartApi",
+export const cartPutRequest = createAsyncThunk(
+  "cart/cartPutRequest",
   async ({ acessToken, cartData }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
@@ -67,14 +64,10 @@ export const updateCartApi = createAsyncThunk(
         body: JSON.stringify(cartData),
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
-
-      throw new Error("Something went wrong");
-    } catch (e) {
-      return e.message;
+      const json = response.json();
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
     }
   }
 );
@@ -92,62 +85,71 @@ const cartSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(getCartApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
+      // GET REQUEST
+      .addCase(cartGetRequest.pending, (state, action) => {
+        state.status = "pending";
+        state.cart = {};
+        state.error = null;
+      })
+      .addCase(cartGetRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = "failed";
           state.cart = {};
-          state.error = action.payload;
+          state.error = null || action.payload?.body;
         } else {
           state.status = "sucess";
-          state.cart = action.payload;
+          state.cart = action.payload.body;
           state.error = null;
         }
       })
-      .addCase(getCartApi.pending, (state, action) => {
-        state.status = "pending";
-        state.error = null;
-      })
-      .addCase(getCartApi.rejected, (state, action) => {
+      .addCase(cartGetRequest.rejected, (state, action) => {
         state.status = "rejected";
+        state.cart = {};
+        state.error = null || action.payload?.body;
+      })
+      // GET REQUEST
+      .addCase(cartPostRequest.pending, (state, action) => {
+        state.status = "pending";
+        state.cart = {};
         state.error = null;
       })
-      .addCase(createCartApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
+      .addCase(cartPostRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = "failed";
           state.cart = {};
-          state.error = action.payload;
+          state.error = null || action.payload?.body;
         } else {
           state.status = "sucess";
-          state.cart = action.payload;
+          state.cart = action.payload.body;
           state.error = null;
         }
       })
-      .addCase(createCartApi.pending, (state, action) => {
-        state.status = "pending";
-        state.error = null;
-      })
-      .addCase(createCartApi.rejected, (state, action) => {
+      .addCase(cartPostRequest.rejected, (state, action) => {
         state.status = "rejected";
+        state.cart = {};
+        state.error = null || action.payload?.body;
+      })
+      // POST REQUEST
+      .addCase(cartPostRequest.pending, (state, action) => {
+        state.status = "pending";
+        state.cart = {};
         state.error = null;
       })
-      .addCase(updateCartApi.fulfilled, (state, action) => {
+      .addCase(cartPostRequest.fulfilled, (state, action) => {
         if (action.payload === "Something went wrong") {
           state.status = "rejected";
           state.cart = {};
-          state.error = action.payload;
+          state.error = null || action.payload?.body;
         } else {
           state.status = "sucess";
-          state.cart = action.payload;
+          state.cart = action.payload.body;
           state.error = null;
         }
       })
-      .addCase(updateCartApi.pending, (state, action) => {
-        state.status = "pending";
-        state.error = null;
-      })
-      .addCase(updateCartApi.rejected, (state, action) => {
+      .addCase(cartPostRequest.rejected, (state, action) => {
         state.status = "rejected";
-        state.error = null;
+        state.cart = {};
+        state.error = null || action.payload?.body;
       });
   },
 });
