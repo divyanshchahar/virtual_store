@@ -17,14 +17,11 @@ export const cartGetRequest = createAsyncThunk(
         },
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
+      const json = await response.json();
 
-      throw new Error("Something went wrong");
-    } catch (e) {
-      return e.message;
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
     }
   }
 );
@@ -65,6 +62,7 @@ export const cartPutRequest = createAsyncThunk(
       });
 
       const json = response.json();
+
       return { ok: response.ok, body: json };
     } catch (error) {
       return error.message;
