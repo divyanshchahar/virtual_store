@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import TopNavBar from "../layouts/TopNavBar";
 
-function HomeRootPage() {
+function RootPage() {
   return (
     <>
       <TopNavBar />
@@ -10,4 +10,4 @@ function HomeRootPage() {
   );
 }
 
-export default HomeRootPage;
+export default RootPage;

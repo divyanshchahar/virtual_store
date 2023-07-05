@@ -1,6 +1,6 @@
 import ProductsList from "../layouts/ProductsList";
 
-function HomePage() {
+function ProductsListPage() {
   return (
     <div>
       <ProductsList />
@@ -8,4 +8,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default ProductsListPage;
