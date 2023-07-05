@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import SingleProductPage from "../pages/SingleProductPage";
 import AccountPage from "../pages/AccountPage";
-import HomeRootPage from "../pages/HomeRootPage";
+import RootPage from "../pages/RootPage";
 import CartPage from "../pages/CartPage";
 import OrdersPage from "../pages/OrdersPage";
 
@@ -12,7 +12,7 @@ function Routing() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomeRootPage />}>
+        <Route path="/" element={<RootPage />}>
           <Route index element={<HomePage />} />
           <Route path="products/:productId" element={<SingleProductPage />} />
           <Route
