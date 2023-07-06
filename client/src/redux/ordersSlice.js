@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiEndPoints from "../assets/api_endpoints";
+import reducerStatus from "../assets/ReducerStatus";
 
 const initialState = {
   orders: [],
@@ -7,8 +8,9 @@ const initialState = {
   error: null,
 };
 
-export const createOrdersApi = createAsyncThunk(
-  "orders/createOrdersApi",
+// POST
+export const ordersPostRequest = createAsyncThunk(
+  "orders/ordersPostRequest",
   async ({ acessToken, orderData }) => {
     try {
       const response = await fetch(apiEndPoints.orders, {
@@ -19,16 +21,19 @@ export const createOrdersApi = createAsyncThunk(
         },
         body: JSON.stringify(orderData),
       });
+
       const json = await response.json();
-      return json;
-    } catch (e) {
-      return e.message;
+
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
     }
   }
 );
 
-export const getOrdersApi = createAsyncThunk(
-  "orders/getOrdersApi",
+// GET
+export const ordersGetRequest = createAsyncThunk(
+  "orders/ordersGetRequest",
   async ({ acessToken, customerId }) => {
     try {
       const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
@@ -37,14 +42,11 @@ export const getOrdersApi = createAsyncThunk(
         },
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
+      const json = await response.json();
 
-      throw new Error("Something went wrong");
-    } catch (e) {
-      return e.message;
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
     }
   }
 );
@@ -54,7 +56,7 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     resetOrders: (state) => {
-      state.status = "fulfilled";
+      state.status = reducerStatus.fulfilled;
       state.error = null;
       state.orders = [];
     },
@@ -62,39 +64,49 @@ const ordersSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(createOrdersApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
-          state.orders = [];
-        } else {
-          state.status = "sucess";
-          state.orders = action.payload;
-        }
-      })
-      .addCase(createOrdersApi.rejected, (state, action) => {
-        state.status = "rejected";
-      })
-      .addCase(createOrdersApi.pending, (state, action) => {
-        state.status = "pending";
-      })
-      .addCase(getOrdersApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
-          state.orders = [];
-        } else {
-          state.status = "sucess";
-          state.orders = action.payload;
-        }
-      })
-      .addCase(getOrdersApi.rejected, (state, action) => {
-        state.status = "rejected";
-        state.orders = [];
-        state.error = action.payload;
-      })
-      .addCase(getOrdersApi.pending, (state, action) => {
-        state.status = "pending";
+      // POST REQUEST
+      .addCase(ordersPostRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
         state.orders = [];
         state.error = null;
+      })
+      .addCase(ordersPostRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.orders = [];
+          state.error = null || action.payload?.body;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.orders = action.payload.body;
+          state.error = null;
+        }
+      })
+      .addCase(ordersPostRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.orders = [];
+        state.error = action.payload.body;
+      })
+      // GET REQUEST
+      .addCase(ordersGetRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.orders = [];
+        state.error = null;
+      })
+      .addCase(ordersGetRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.orders = [];
+          state.error = null || action.payload?.body;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.orders = action.payload.body;
+          state.error = null;
+        }
+      })
+      .addCase(ordersGetRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.orders = [];
+        state.error = action.payload.body;
       });
   },
 });

@@ -1,9 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
-import { getOrdersApi } from "../redux/ordersSlice";
+import { ordersGetRequest } from "../redux/ordersSlice";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import NoOrdersLayout from "../layouts/NoOrdersLayout";
 import OrderedItemLayout from "../layouts/OrderedItemLayout";
+import reducerStatus from "../assets/ReducerStatus";
+import NoItemsLayout from "../layouts/NoItemsLayout";
+import LoadingLayout from "../layouts/LoadingLayout";
+import ErrorLayout from "../layouts/ErrorLayout";
 
 function OrdersPage() {
   const selectedUser = useSelector((state) => state.users.users);
@@ -12,7 +16,7 @@ function OrdersPage() {
   const dispatch = useDispatch();
   const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
 
-  // getting cart on render
+  // GETTING ORDERS ON RENDER
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -25,7 +29,7 @@ function OrdersPage() {
           });
 
           dispatch(
-            getOrdersApi({
+            ordersGetRequest({
               acessToken: acessToken,
               customerId: selectedUser._id,
             })
@@ -81,7 +85,14 @@ function OrdersPage() {
 
   return (
     <>
-      {orders.length > 0 ? (
+      {orders.status === reducerStatus.idle && <NoItemsLayout />}
+
+      {orders.status === reducerStatus.pending && <LoadingLayout />}
+
+      {orders.status === reducerStatus.rejected && <ErrorLayout />}
+
+      {(orders.status === reducerStatus.fulfilled) &
+      (orders.orders.length > 0) ? (
         <OrderedItemLayout processedData={processedData} />
       ) : (
         <NoOrdersLayout />

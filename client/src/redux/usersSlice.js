@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiEndPoints from "../assets/api_endpoints";
+import reducerStatus from "../assets/ReducerStatus";
 
 const initialState = {
   users: {},
@@ -7,8 +8,9 @@ const initialState = {
   error: null,
 };
 
-export const createUsersApi = createAsyncThunk(
-  "users/createUsersApi",
+// POST
+export const usersPostRequest = createAsyncThunk(
+  "users/usersPostRequest",
   async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
@@ -20,20 +22,38 @@ export const createUsersApi = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
+      const json = await response.json();
 
-      throw new Error("Something went wrong");
+      return { ok: response.ok, body: json };
     } catch (error) {
       return error.message;
     }
   }
 );
 
-export const updateUserApi = createAsyncThunk(
-  "user/updateUserApi",
+// GET
+export const usersGetRequest = createAsyncThunk(
+  "users/usersGetRequest",
+  async ({ acessToken, authId }) => {
+    try {
+      const response = await fetch(`${apiEndPoints.users}/${authId}`, {
+        headers: {
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
+
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.messgae;
+    }
+  }
+);
+
+// PUT
+export const usersPutRequest = createAsyncThunk(
+  "user/usersPutRequest",
   async ({ acessToken, userData }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
@@ -45,42 +65,18 @@ export const updateUserApi = createAsyncThunk(
         body: JSON.stringify(userData),
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
+      const json = await response.json();
 
-      throw new Error("Something went wrong");
+      return { ok: response.ok, body: json };
     } catch (error) {
       return error.message;
     }
   }
 );
 
-export const getUsersApi = createAsyncThunk(
-  "users/getUsersApi",
-  async ({ acessToken, authId }) => {
-    try {
-      const response = await fetch(`${apiEndPoints.users}/${authId}`, {
-        headers: {
-          Authorization: `Bearer ${acessToken}`,
-        },
-      });
-
-      if (response.ok) {
-        const json = await response.json();
-        return json;
-      }
-
-      throw new Error("Something went wrong");
-    } catch (e) {
-      return e.messgae;
-    }
-  }
-);
-
-export const deleteUserApi = createAsyncThunk(
-  "users/deleteUserApi",
+// DELETE
+export const usersDeleteRequest = createAsyncThunk(
+  "users/usersDeleteRequest",
   async ({ acessToken, id }) => {
     try {
       const response = await fetch(`${apiEndPoints.users}/${id}`, {
@@ -92,9 +88,9 @@ export const deleteUserApi = createAsyncThunk(
 
       const json = await response.json();
 
-      return json;
-    } catch (e) {
-      return e.messgae;
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.messgae;
     }
   }
 );
@@ -104,67 +100,100 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     resetUser: (state) => {
-      state.status = "fulfilled ";
+      state.status = reducerStatus.fulfilled;
       state.error = null;
       state.users = {};
     },
   },
   extraReducers(builder) {
     builder
-      .addCase(createUsersApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
+      //POST REQUEST
+      .addCase(usersPostRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.users = {};
+        state.error = null;
+      })
+      .addCase(usersPostRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
           state.users = {};
+          state.error = null || action.payload?.body;
         } else {
-          state.status = "sucess";
-          state.users = action.payload;
+          state.status = reducerStatus.fulfilled;
+          state.users = action.payload.body;
+          state.error = null;
         }
       })
-      .addCase(createUsersApi.rejected, (state, action) => {
-        state.status = "rejected";
+      .addCase(usersPostRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.users = {};
+        state.error = null || action.payload;
       })
-      .addCase(createUsersApi.pending, (state, action) => {
-        state.status = "pending";
+      // GET REQUEST
+      .addCase(usersGetRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.users = {};
+        state.error = null;
       })
-      .addCase(getUsersApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
+      .addCase(usersGetRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
           state.users = {};
+          state.error = null || action.payload?.body;
         } else {
-          state.status = "sucess";
-          state.users = action.payload;
+          state.status = reducerStatus.fulfilled;
+          state.users = action.payload.body;
+          state.error = null;
         }
       })
-      .addCase(getUsersApi.rejected, (state, action) => {
-        state.status = "rejected";
-        state.error = action.payload;
+      .addCase(usersGetRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.users = {};
+        state.error = null || action.payload;
       })
-      .addCase(getUsersApi.pending, (state, action) => {
-        state.status = "pending";
+      // PUT REQUEST
+      .addCase(usersPutRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.users = {};
+        state.error = null;
       })
-      .addCase(updateUserApi.fulfilled, (state, action) => {
-        if (action.payload === "Something went wrong") {
-          state.status = "rejected";
+      .addCase(usersPutRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
           state.users = {};
+          state.error = null || action.payload?.body;
         } else {
-          state.status = "sucess";
-          state.users = action.payload;
+          state.status = reducerStatus.fulfilled;
+          state.users = action.payload.body;
+          state.error = null;
         }
       })
-      .addCase(updateUserApi.rejected, (state, action) => {
-        state.status = "rejected";
+      .addCase(usersPutRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.users = {};
+        state.error = null || action.payload;
       })
-      .addCase(updateUserApi.pending, (state, action) => {
-        state.status = "pending";
+      // DELETE REQUEST
+      .addCase(usersDeleteRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.users = {};
+        state.error = null;
       })
-      .addCase(deleteUserApi.fulfilled, (state, action) => {
-        state.status = "sucess";
+      .addCase(usersDeleteRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.users = {};
+          state.error = null || action.payload?.body;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.users = action.payload.body;
+          state.error = null;
+        }
       })
-      .addCase(deleteUserApi.rejected, (state, action) => {
-        state.status = "rejected";
-      })
-      .addCase(deleteUserApi.pending, (state, action) => {
-        state.status = "pending";
+      .addCase(usersDeleteRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.users = {};
+        state.error = null || action.payload;
       });
   },
 });

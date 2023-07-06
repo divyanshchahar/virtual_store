@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "../pages/HomePage";
+import ProductsListPage from "../pages/ProductsListPage";
 import SingleProductPage from "../pages/SingleProductPage";
 import AccountPage from "../pages/AccountPage";
-import HomeRootPage from "../pages/HomeRootPage";
+import RootPage from "../pages/RootPage";
 import CartPage from "../pages/CartPage";
 import OrdersPage from "../pages/OrdersPage";
 
@@ -12,8 +12,8 @@ function Routing() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomeRootPage />}>
-          <Route index element={<HomePage />} />
+        <Route path="/" element={<RootPage />}>
+          <Route index element={<ProductsListPage />} />
           <Route path="products/:productId" element={<SingleProductPage />} />
           <Route
             path="account"
