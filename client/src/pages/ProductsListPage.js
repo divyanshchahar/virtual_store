@@ -9,9 +9,9 @@ import {
 } from "../redux/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import ErrorLayout from "./ErrorLayout";
-import LoadingLayout from "./LoadingLayout";
-import NoItemsLayout from "./NoItemsLayout";
+import ErrorLayout from "../layouts/ErrorLayout";
+import LoadingLayout from "../layouts/LoadingLayout";
+import NoItemsLayout from "../layouts/NoItemsLayout";
 import reducerStatus from "../assets/ReducerStatus";
 import ProductsListLayout from "../layouts/ProductsListLayout";
 
