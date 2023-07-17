@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
-  createUsersApi,
-  getUsersApi,
-  updateUserApi,
-  deleteUserApi,
+  usersPostRequest,
+  usersGetRequest,
+  usersPutRequest,
+  usersDeleteRequest,
   resetUser,
 } from "../redux/usersSlice";
 import { resetCart } from "../redux/cartSlice";
@@ -31,7 +31,9 @@ function RegistrationForm() {
             },
           });
 
-          dispatch(getUsersApi({ authId: user.sub, acessToken: acessToken }));
+          dispatch(
+            usersGetRequest({ authId: user.sub, acessToken: acessToken })
+          );
         }
       } catch (error) {
         console.log(error);
@@ -105,7 +107,9 @@ function RegistrationForm() {
         },
       });
 
-      dispatch(createUsersApi({ acessToken: acessToken, userData: userData }));
+      dispatch(
+        usersPostRequest({ acessToken: acessToken, userData: userData })
+      );
     }
   };
 
@@ -121,7 +125,7 @@ function RegistrationForm() {
         },
       });
 
-      dispatch(updateUserApi({ acessToken: acessToken, userData: userData }));
+      dispatch(usersPutRequest({ acessToken: acessToken, userData: userData }));
     }
   };
 
@@ -135,7 +139,7 @@ function RegistrationForm() {
     });
 
     dispatch(
-      deleteUserApi({
+      usersDeleteRequest({
         acessToken: acessToken,
         id: selectedUser._id,
       })
