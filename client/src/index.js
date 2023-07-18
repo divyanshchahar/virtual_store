@@ -16,17 +16,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Auth0Provider
-          domain={process.env.REACT_APP_DOMAIN}
-          clientId={process.env.REACT_APP_CLIENT_ID}
-          authorizationParams={{
-            redirect_uri: window.location.href,
-            audience: process.env.REACT_APP_AUDIENCE,
-            scope: "write:orders write:users write:carts",
-          }}
-        >
-          <App />
-        </Auth0Provider>
+        <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
