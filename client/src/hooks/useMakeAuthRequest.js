@@ -17,7 +17,6 @@ function useMakeAuthRequest() {
         !tokenAge ||
         !lastUpdated
       ) {
-        console.log(tokenAge);
         const newAuth = await refreshAuth();
 
         if (body) {
