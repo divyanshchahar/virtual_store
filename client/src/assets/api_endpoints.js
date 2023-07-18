@@ -3,6 +3,9 @@ const apiEndPoints = {
   orders: `${process.env.REACT_APP_AUDIENCE}orders`,
   users: `${process.env.REACT_APP_AUDIENCE}users`,
   cart: `${process.env.REACT_APP_AUDIENCE}cart`,
+  login: `${process.env.REACT_APP_AUDIENCE}login`,
+  logout: `${process.env.REACT_APP_AUDIENCE}logout`,
+  refresh: `${process.env.REACT_APP_AUDIENCE}refresh`,
 };
 
 export default apiEndPoints;
