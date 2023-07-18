@@ -6,8 +6,6 @@ import RootPage from "../pages/RootPage";
 import CartPage from "../pages/CartPage";
 import OrdersPage from "../pages/OrdersPage";
 
-import { AuthenticationGuard } from "./AuthenticationGuard";
-
 function Routing() {
   return (
     <>
@@ -15,15 +13,9 @@ function Routing() {
         <Route path="/" element={<RootPage />}>
           <Route index element={<ProductsListPage />} />
           <Route path="products/:productId" element={<SingleProductPage />} />
-          <Route
-            path="account"
-            element={<AuthenticationGuard component={AccountPage} />}
-          />
+          <Route path="account" element={<AccountPage />} />
           <Route path="cart" element={<CartPage />} />
-          <Route
-            path="orders"
-            element={<AuthenticationGuard component={OrdersPage} />}
-          />
+          <Route path="orders" element={<OrdersPage />} />
         </Route>
       </Routes>
     </>
