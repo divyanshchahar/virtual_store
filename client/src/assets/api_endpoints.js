@@ -6,7 +6,7 @@ const apiEndPoints = {
   login: `${process.env.REACT_APP_AUDIENCE}login`,
   logout: `${process.env.REACT_APP_AUDIENCE}logout`,
   refresh: `${process.env.REACT_APP_AUDIENCE}refresh`,
-  signup: `${process.env.REACT_APP_AUDIENCE}refresh`,
+  signup: `${process.env.REACT_APP_AUDIENCE}signup`,
 };
 
 export default apiEndPoints;
