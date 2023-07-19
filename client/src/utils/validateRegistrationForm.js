@@ -5,7 +5,7 @@ function validateRegistrationForm({
   address: { house, street, city, pin, country },
   payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
 }) {
-  const data = {
+  const userData = {
     name,
     email,
     authId,
@@ -29,9 +29,12 @@ function validateRegistrationForm({
   };
 
   let alertShown = false;
+  const pattern = /\s/g;
 
   if (
-    (typeof data.name === "undefined" || data.name.length === 0) &&
+    (typeof userData.name === "null" ||
+      pattern.test(userData.name) ||
+      userData.name.length === 0) &&
     !alertShown
   ) {
     alertShown = true;
@@ -39,16 +42,20 @@ function validateRegistrationForm({
   }
 
   if (
-    (typeof data.email === "undefined" || data.email.length === 0) &&
+    (typeof userData.email !== "string" ||
+      pattern.test(userData.email) ||
+      userData.email.length === 0) &&
     !alertShown
   ) {
     alertShown = true;
     alert(`${attributeNames.email} cannot be blank`);
   }
 
-  Object.entries(data.address).map((item) => {
+  Object.entries(userData.address).map((item) => {
     if (
-      (typeof item[1] === "undefined" || item[1].length === 0) &&
+      (typeof item[1] !== "string" ||
+        pattern.test(item[1]) ||
+        item[1].length === 0) &&
       !alertShown
     ) {
       alertShown = true;
@@ -56,9 +63,11 @@ function validateRegistrationForm({
     }
   });
 
-  Object.entries(data.payment).map((item) => {
+  Object.entries(userData.payment).map((item) => {
     if (
-      (typeof item[1] === "undefined" || item[1].length === 0) &&
+      (typeof item[1] !== "string" ||
+        pattern.test(item[1]) ||
+        item[1].length === 0) &&
       !alertShown
     ) {
       alertShown = true;
