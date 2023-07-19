@@ -34,7 +34,10 @@ router.route("/").post(async (req, res) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .send({ user: user, acessToken: acessToken })
+      .send({
+        user: { ...user, password: req.body.password },
+        acessToken: acessToken,
+      })
       .status(200);
   } catch (error) {
     res.status(500).send(error.message);
