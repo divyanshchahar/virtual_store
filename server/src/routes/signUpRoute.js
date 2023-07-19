@@ -35,11 +35,12 @@ router.route("/").post(async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       })
       .send({
-        user: { ...user, password: req.body.password },
+        user: { ...user._doc, password: req.body.password },
         acessToken: acessToken,
       })
       .status(200);
   } catch (error) {
+    console.error(error);
     res.status(500).send(error.message);
   }
 });
