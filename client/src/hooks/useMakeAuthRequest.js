@@ -20,13 +20,13 @@ function useMakeAuthRequest() {
         const newAuth = await refreshAuth();
 
         if (body) {
-          dispatch(reducer(newAuth, body));
+          dispatch(reducer({ newAuth, body }));
         } else {
           dispatch(reducer(newAuth));
         }
       } else {
         if (body) {
-          dispatch(reducer(auth, body));
+          dispatch(reducer({ auth, body }));
         } else {
           dispatch(reducer(auth));
         }
