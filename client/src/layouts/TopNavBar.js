@@ -6,7 +6,7 @@ import { resetOrders } from "../redux/ordersSlice";
 import { useDispatch } from "react-redux";
 
 function TopNavBar() {
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, logout } = useAuth0();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -81,12 +81,9 @@ function TopNavBar() {
                     Logout
                   </button>
                 ) : (
-                  <button
-                    className="nav-link"
-                    onClick={() => loginWithRedirect()}
-                  >
+                  <Link to="login" className="nav-link">
                     Login
-                  </button>
+                  </Link>
                 )}
               </li>
 
