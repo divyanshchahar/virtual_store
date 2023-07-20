@@ -5,7 +5,7 @@ const apiEndPoints = {
   cart: `${process.env.REACT_APP_AUDIENCE}cart`,
   login: `${process.env.REACT_APP_AUDIENCE}login`,
   logout: `${process.env.REACT_APP_AUDIENCE}logout`,
-  refresh: `${process.env.REACT_APP_AUDIENCE}refresh`,
+  refresh: `${process.env.REACT_APP_AUDIENCE}refreshToken`,
   signup: `${process.env.REACT_APP_AUDIENCE}signup`,
 };
 
