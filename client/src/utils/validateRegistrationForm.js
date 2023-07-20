@@ -1,21 +1,22 @@
 function validateRegistrationForm({
   name,
   email,
-  authId,
+  password,
   address: { house, street, city, pin, country },
-  payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
+  payments: { cardNo, nameOnCard, validFrom, validUpto, cvv },
 }) {
   const userData = {
     name,
     email,
-    authId,
+    password,
     address: { house, street, city, pin, country },
-    payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
+    payments: { cardNo, nameOnCard, validFrom, validUpto, cvv },
   };
 
   const attributeNames = {
     name: "Name",
     email: "e-mail",
+    password: "password",
     house: "House/Apartment No",
     street: "Street",
     city: "City",
@@ -32,10 +33,8 @@ function validateRegistrationForm({
   const pattern = /\s/g;
 
   if (
-    (typeof userData.name === "null" ||
-      pattern.test(userData.name) ||
-      userData.name.length === 0) &&
-    !alertShown
+    typeof userData.name !== "string" ||
+    (userData.name.replace(pattern, "").length === 0 && !alertShown)
   ) {
     alertShown = true;
     alert(`${attributeNames.name} cannot be blank`);
@@ -43,19 +42,26 @@ function validateRegistrationForm({
 
   if (
     (typeof userData.email !== "string" ||
-      pattern.test(userData.email) ||
-      userData.email.length === 0) &&
+      userData.email.replace(pattern, "").length === 0) &&
     !alertShown
   ) {
     alertShown = true;
     alert(`${attributeNames.email} cannot be blank`);
   }
 
+  if (
+    (typeof userData.password !== "string" ||
+      userData.password.replace(pattern, "").length === 0) &&
+    !alertShown
+  ) {
+    alertShown = true;
+    alert(`${attributeNames.password} cannot be blank`);
+  }
+
   Object.entries(userData.address).map((item) => {
     if (
       (typeof item[1] !== "string" ||
-        pattern.test(item[1]) ||
-        item[1].length === 0) &&
+        item[1].replace(pattern, "").length === 0) &&
       !alertShown
     ) {
       alertShown = true;
@@ -63,11 +69,10 @@ function validateRegistrationForm({
     }
   });
 
-  Object.entries(userData.payment).map((item) => {
+  Object.entries(userData.payments).map((item) => {
     if (
       (typeof item[1] !== "string" ||
-        pattern.test(item[1]) ||
-        item[1].length === 0) &&
+        item[1].replace(pattern, "").length === 0) &&
       !alertShown
     ) {
       alertShown = true;
