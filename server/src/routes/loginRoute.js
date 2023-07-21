@@ -31,7 +31,7 @@ router.route("/").post(async (req, res) => {
         { id: user._id.toString() },
         process.env.REFRESH_TOKEN_SECRET,
         {
-          expiresIn: "15d",
+          expiresIn: "1d",
         }
       );
 
