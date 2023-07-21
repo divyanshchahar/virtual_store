@@ -11,20 +11,20 @@ const initialState = {
 // POST
 export const usersPostRequest = createAsyncThunk(
   "users/usersPostRequest",
-  async ({ acessToken, userData }) => {
+  async ({ body }) => {
     try {
-      const response = await fetch(apiEndPoints.users, {
+      const response = await fetch(apiEndPoints.signup, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(body),
+        credentials: "include",
       });
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user };
     } catch (error) {
       return error.message;
     }
@@ -34,9 +34,9 @@ export const usersPostRequest = createAsyncThunk(
 // GET
 export const usersGetRequest = createAsyncThunk(
   "users/usersGetRequest",
-  async ({ acessToken, authId }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.users}/${authId}`, {
+      const response = await fetch(apiEndPoints.users, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
@@ -54,7 +54,7 @@ export const usersGetRequest = createAsyncThunk(
 // PUT
 export const usersPutRequest = createAsyncThunk(
   "user/usersPutRequest",
-  async ({ acessToken, userData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.users, {
         method: "PUT",
@@ -62,7 +62,7 @@ export const usersPutRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(body),
       });
 
       const json = await response.json();
@@ -77,9 +77,9 @@ export const usersPutRequest = createAsyncThunk(
 // DELETE
 export const usersDeleteRequest = createAsyncThunk(
   "users/usersDeleteRequest",
-  async ({ acessToken, id }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.users}/${id}`, {
+      const response = await fetch(apiEndPoints.users, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${acessToken}`,
@@ -98,13 +98,7 @@ export const usersDeleteRequest = createAsyncThunk(
 const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    resetUser: (state) => {
-      state.status = reducerStatus.fulfilled;
-      state.error = null;
-      state.users = {};
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       //POST REQUEST
