@@ -21,10 +21,10 @@ const corsOption = {
   credentials: true,
 };
 
-mongoose.connect(process.env.DATABASE);
-
-app.use(express.json());
 app.use(cors(corsOption));
+app.use(express.json());
+
+mongoose.connect(process.env.DATABASE);
 
 app.use("/products", productsRouter);
 app.use("/users", userRouter);
