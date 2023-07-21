@@ -1,22 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   usersPostRequest,
   usersPutRequest,
   usersDeleteRequest,
-  resetUser,
   usersGetRequest,
 } from "../redux/usersSlice";
-import { resetCart } from "../redux/cartSlice";
-import { resetOrders } from "../redux/ordersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import validateRegistrationForm from "../utils/validateRegistrationForm";
 import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
+import AuthContext from "../context/AuthContextProvider";
 
 function RegistrationFormLayout() {
+  const user = useSelector((state) => state.users.users);
+
   const dispatch = useDispatch();
   const makeAuthRequest = useMakeAuthRequest();
-
-  const user = useSelector((state) => state.users.users);
+  const { logout } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,19 +37,17 @@ function RegistrationFormLayout() {
     },
   });
 
+  // fetching user on page load
   useEffect(() => {
     makeAuthRequest(user, usersGetRequest);
   }, []);
 
+  // fetching user on page load
   useEffect(() => {
-    const extracted = { ...user.address };
-    console.log(extracted.street);
-
     setFormData({
       ...formData,
       name: user.name,
       email: user.email,
-      password: user.password,
       address: { ...user.address },
       payments: { ...user.payments },
     });
@@ -61,7 +58,7 @@ function RegistrationFormLayout() {
     const alertShown = validateRegistrationForm(formData);
 
     if (!alertShown) {
-      dispatch(usersPostRequest(formData));
+      dispatch(usersPostRequest({ body: formData }));
     }
   };
 
@@ -75,11 +72,9 @@ function RegistrationFormLayout() {
   };
 
   // function to execute delete operation (DELETE request)
-  const deleteUser = async () => {
+  const deleteUser = () => {
     makeAuthRequest(user, usersDeleteRequest);
-    dispatch(resetCart());
-    dispatch(resetOrders());
-    dispatch(resetUser());
+    logout();
   };
 
   return (
