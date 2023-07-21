@@ -10,6 +10,7 @@ function useMakeAuthRequest() {
     try {
       const tokenAge = (Date.now() - lastUpdated) / (1000 * 60);
 
+      // if refresh token is not present of has expired
       if (
         state.responseCode === 403 ||
         !auth ||
@@ -20,15 +21,17 @@ function useMakeAuthRequest() {
         const newAuth = await refreshAuth();
 
         if (body) {
-          dispatch(reducer({ newAuth, body }));
+          dispatch(reducer({ acessToken: newAuth, body: body }));
         } else {
-          dispatch(reducer(newAuth));
+          dispatch(reducer({ acessToken: newAuth }));
         }
-      } else {
+      }
+      // if refresh token is present
+      else {
         if (body) {
-          dispatch(reducer({ auth, body }));
+          dispatch(reducer({ acessToken: auth, body: body }));
         } else {
-          dispatch(reducer(auth));
+          dispatch(reducer({ acessToken: auth }));
         }
       }
     } catch (error) {
