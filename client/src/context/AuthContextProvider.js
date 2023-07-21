@@ -12,6 +12,9 @@ export function AuthContextProvider({ children }) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch(apiEndPoints.refresh, {
+          headers: {
+            "Content-Type": "application/json",
+          },
           method: "POST",
           credentials: "include",
         });
@@ -37,27 +40,54 @@ export function AuthContextProvider({ children }) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await fetch(apiEndPoints.login, {
-          method: "PUT",
-          body: JSON.stringify({ email, password }),
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email, password: password }),
         });
 
         if (response.ok) {
-          const json = response.json();
+          const json = await response.json();
 
           setAuth(json.acessToken);
           setLastUpdated(Date.now());
+          setIsLoggedIn(true);
 
           resolve(json.acessToken);
         } else {
           reject();
         }
-      } catch (error) {}
+      } catch (error) {
+        reject(error);
+      }
     });
+  };
+
+  const logout = async () => {
+    try {
+      const response = await fetch(apiEndPoints.logout, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setAuth(null);
+        setIsLoggedIn(false);
+        setLastUpdated(null);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ auth, lastUpdated, isLoggedIn, login, refreshAuth }}
+      value={{ auth, lastUpdated, isLoggedIn, login, logout, refreshAuth }}
     >
       {children}
     </AuthContext.Provider>
