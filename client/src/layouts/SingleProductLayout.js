@@ -77,8 +77,12 @@ function SingleProductLayout({ product }) {
             <p>{`$ ${product.price}`}</p>
 
             <div className="btn-group">
-              <button className="btn btn-primary">Add to Cart</button>
-              <button className="btn btn-primary">Remove from Cart</button>
+              <button className="btn btn-primary">
+                <i class="bi bi-bag-plus"></i>
+              </button>
+              <button className="btn btn-primary">
+                <i class="bi bi-bag-dash"></i>
+              </button>
             </div>
           </div>
         </div>
