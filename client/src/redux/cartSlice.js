@@ -34,9 +34,9 @@ export const cartPostRequest = createAsyncThunk(
 // GET
 export const cartGetRequest = createAsyncThunk(
   "cart/cartGetRequest",
-  async ({ acessToken, customerId }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.cart}/${customerId}`, {
+      const response = await fetch(apiEndPoints.cart, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
