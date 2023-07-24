@@ -11,7 +11,7 @@ const initialState = {
 // POST
 export const cartPostRequest = createAsyncThunk(
   "cart/cartPostRequest",
-  async ({ acessToken, cartData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
         method: "POST",
@@ -19,10 +19,10 @@ export const cartPostRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(cartData),
+        body: JSON.stringify(body),
       });
 
-      const json = response.json();
+      const json = await response.json();
 
       return { ok: response.ok, body: json };
     } catch (error) {
@@ -54,7 +54,7 @@ export const cartGetRequest = createAsyncThunk(
 // PUT
 export const cartPutRequest = createAsyncThunk(
   "cart/cartPutRequest",
-  async ({ acessToken, cartData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
         method: "PUT",
@@ -62,10 +62,10 @@ export const cartPutRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(cartData),
+        body: JSON.stringify(body),
       });
 
-      const json = response.json();
+      const json = await response.json();
 
       return { ok: response.ok, body: json };
     } catch (error) {
