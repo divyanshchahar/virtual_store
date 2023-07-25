@@ -74,6 +74,28 @@ export const cartPutRequest = createAsyncThunk(
   }
 );
 
+// DELETE
+export const cartDeleteRequest = createAsyncThunk(
+  "cart/cartDeleteRequest",
+  async ({ acessToken }) => {
+    try {
+      const response = await fetch(apiEndPoints.cart, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
+
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -149,6 +171,28 @@ const cartSlice = createSlice({
         }
       })
       .addCase(cartPutRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.cart = {};
+        state.error = null || action.payload;
+      })
+      // DELETE
+      .addCase(cartDeleteRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.cart = {};
+        state.error = null;
+      })
+      .addCase(cartDeleteRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.cart = {};
+          state.error = null || action.payload?.body;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.cart = action.payload.body;
+          state.error = null;
+        }
+      })
+      .addCase(cartDeleteRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
         state.error = null || action.payload;
