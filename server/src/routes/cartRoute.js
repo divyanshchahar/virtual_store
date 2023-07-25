@@ -72,11 +72,21 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
     // removing products
     cart.products = cart.products.filter((item) => item.qty > 0);
 
-    await cart.save();
+    const updatedCart = await cart.save();
 
-    res.status(200).send(cart);
+    res.status(200).send(updatedCart);
   } catch (error) {
     res.status(500).send(error.message);
+  }
+});
+
+router.route("/").delete(authorizationMiddleware, async (req, res) => {
+  try {
+    const { isDeleted } = await Cart.deleteOne({ customerId: req.id });
+    if (isDeleted.deletecount > 0) return res.status(200);
+    return res.status(404);
+  } catch (error) {
+    return res.send(error).status(500);
   }
 });
 
