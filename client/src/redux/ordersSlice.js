@@ -11,7 +11,7 @@ const initialState = {
 // POST
 export const ordersPostRequest = createAsyncThunk(
   "orders/ordersPostRequest",
-  async ({ acessToken, orderData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.orders, {
         method: "POST",
@@ -19,7 +19,7 @@ export const ordersPostRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify(body),
       });
 
       const json = await response.json();
