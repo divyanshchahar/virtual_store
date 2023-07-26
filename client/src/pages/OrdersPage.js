@@ -13,10 +13,13 @@ function OrdersPage() {
   const orders = useSelector((state) => state.orders);
 
   const makeAuthRequest = useMakeAuthRequest();
-  // fetching orders ono render
+
+  // fetching orders on render
   useEffect(() => {
-    makeAuthRequest(orders, ordersGetRequest);
-  }, [orders]);
+    if (!orders.orders?.length > 0) {
+      makeAuthRequest(orders, ordersGetRequest);
+    }
+  }, []);
 
   return (
     <>
