@@ -34,9 +34,9 @@ export const ordersPostRequest = createAsyncThunk(
 // GET
 export const ordersGetRequest = createAsyncThunk(
   "orders/ordersGetRequest",
-  async ({ acessToken, customerId }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
+      const response = await fetch(apiEndPoints.orders, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
