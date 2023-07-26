@@ -1,4 +1,8 @@
+import useOperateCart from "../hooks/useOperateCart";
+
 function SingleProductLayout({ product }) {
+  const { addItem, removeItem } = useOperateCart();
+
   return (
     <>
       <div className="container p-5">
@@ -77,8 +81,19 @@ function SingleProductLayout({ product }) {
             <p>{`$ ${product.price}`}</p>
 
             <div className="btn-group">
-              <button className="btn btn-primary">Add to Cart</button>
-              <button className="btn btn-primary">Remove from Cart</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => addItem(product._id)}
+              >
+                <i class="bi bi-bag-plus"></i>
+              </button>
+
+              <button
+                className="btn btn-primary"
+                onClick={() => removeItem(product._id)}
+              >
+                <i class="bi bi-bag-dash"></i>
+              </button>
             </div>
           </div>
         </div>

@@ -1,157 +1,80 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   usersPostRequest,
-  usersGetRequest,
   usersPutRequest,
   usersDeleteRequest,
-  resetUser,
+  usersGetRequest,
 } from "../redux/usersSlice";
-import { resetCart } from "../redux/cartSlice";
-import { resetOrders } from "../redux/ordersSlice";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch, useSelector } from "react-redux";
 import validateRegistrationForm from "../utils/validateRegistrationForm";
+import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
+import AuthContext from "../context/AuthContextProvider";
 
-function RegistrationForm() {
+function RegistrationFormLayout() {
+  const user = useSelector((state) => state.users.users);
+
   const dispatch = useDispatch();
-  const { getAccessTokenSilently, logout, user, isAuthenticated, isLoading } =
-    useAuth0();
+  const makeAuthRequest = useMakeAuthRequest();
+  const { logout } = useContext(AuthContext);
 
-  const selectedUser = useSelector((state) => state.users.users);
-
-  // loading user on page load
-  useEffect(() => {
-    const setUserOnPageLoad = async () => {
-      try {
-        if (isAuthenticated && !isLoading) {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:users",
-            },
-          });
-
-          dispatch(
-            usersGetRequest({ authId: user.sub, acessToken: acessToken })
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    setUserOnPageLoad();
-  }, [user]);
-
-  // populating form
-  useEffect(() => {
-    try {
-      if (Object.keys(selectedUser).length > 0) {
-        setName(selectedUser.name);
-        setEmail(selectedUser.email);
-        setHouse(selectedUser.address.house);
-        setStreet(selectedUser.address.street);
-        setCity(selectedUser.address.city);
-        setPin(selectedUser.address.pin);
-        setCountry(selectedUser.address.country);
-        setNameOnCard(selectedUser.payment.nameOnCard);
-        setCardNo(selectedUser.payment.cardNo);
-        setValidFrom(selectedUser.payment.validFrom);
-        setValidUpto(selectedUser.payment.validUpto);
-        setCvv(selectedUser.payment.cvv);
-      }
-    } catch (error) {}
-  }, [selectedUser]);
-
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [house, setHouse] = useState();
-  const [street, setStreet] = useState();
-  const [city, setCity] = useState();
-  const [pin, setPin] = useState();
-  const [country, setCountry] = useState();
-  const [nameOnCard, setNameOnCard] = useState();
-  const [cardNo, setCardNo] = useState();
-  const [validFrom, setValidFrom] = useState();
-  const [validUpto, setValidUpto] = useState();
-  const [cvv, setCvv] = useState();
-
-  const userData = {
-    name,
-    email,
-    authId: user.sub,
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
     address: {
-      house,
-      street,
-      city,
-      pin,
-      country,
+      house: "",
+      street: "",
+      city: "",
+      pin: "",
+      country: "",
     },
-    payment: {
-      cardNo,
-      nameOnCard,
-      validFrom,
-      validUpto,
-      cvv,
+    payments: {
+      nameOnCard: "",
+      cardNo: "",
+      validFrom: "",
+      validUpto: "",
+      cvv: "",
     },
-  };
+  });
+
+  // fetching user on page load
+  useEffect(() => {
+    makeAuthRequest(user, usersGetRequest);
+  }, []);
+
+  // fetching user on page load
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      name: user.name,
+      email: user.email,
+      address: { ...user.address },
+      payments: { ...user.payments },
+    });
+  }, [user]);
 
   // function to register new user (POST request)
   const registerUser = async () => {
-    const alertShown = validateRegistrationForm(userData);
+    const alertShown = validateRegistrationForm(formData);
 
     if (!alertShown) {
-      const acessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: process.env.REACT_APP_AUDIENCE,
-          scope: "write:users",
-        },
-      });
-
-      dispatch(
-        usersPostRequest({ acessToken: acessToken, userData: userData })
-      );
+      dispatch(usersPostRequest({ body: formData }));
     }
   };
 
   // function to update user (PUT request)
   const updateUser = async () => {
-    const alertShown = validateRegistrationForm(userData);
+    const alertShown = validateRegistrationForm(formData);
 
     if (!alertShown) {
-      const acessToken = await getAccessTokenSilently({
-        authorizationParams: {
-          audience: process.env.REACT_APP_AUDIENCE,
-          scope: "write:users",
-        },
-      });
-
-      dispatch(usersPutRequest({ acessToken: acessToken, userData: userData }));
+      makeAuthRequest(user, usersPutRequest, formData);
     }
   };
 
   // function to execute delete operation (DELETE request)
-  const deleteUser = async () => {
-    const acessToken = await getAccessTokenSilently({
-      authorizationParams: {
-        audience: process.env.REACT_APP_AUDIENCE,
-        scope: "write:users",
-      },
-    });
-
-    dispatch(
-      usersDeleteRequest({
-        acessToken: acessToken,
-        id: selectedUser._id,
-      })
-    );
-
-    dispatch(resetCart());
-    dispatch(resetOrders());
-    dispatch(resetUser());
-
-    logout({
-      logoutParams: { returnTo: window.location.origin },
-    });
+  const deleteUser = () => {
+    makeAuthRequest(user, usersDeleteRequest);
+    logout();
   };
 
   return (
@@ -167,6 +90,7 @@ function RegistrationForm() {
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
                 <h5 className="card-title">User Details</h5>
+
                 <div className="mb-3">
                   <label htmlFor="input-name" className="form-label">
                     Your Name
@@ -176,8 +100,10 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-name"
                     aria-describedby="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                   />
                 </div>
 
@@ -190,8 +116,26 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-email"
                     aria-describedby="e-mail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="input-password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="input-password"
+                    aria-describedby="password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -202,6 +146,7 @@ function RegistrationForm() {
             <div className="card m-auto" style={{ maxWidth: "50rem" }}>
               <div className="card-body">
                 <h5 className="card-title">Address</h5>
+
                 <div className="mb-3">
                   <label htmlFor="input-house-number" className="form-label">
                     House/Apartment No
@@ -211,8 +156,13 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-house-number"
                     aria-describedby="house-number"
-                    value={house}
-                    onChange={(e) => setHouse(e.target.value)}
+                    value={formData.address.house}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, house: e.target.value },
+                      })
+                    }
                   />
                 </div>
 
@@ -225,8 +175,16 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-street"
                     aria-describedby="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
+                    value={formData.address.street}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: {
+                          ...formData.address,
+                          street: e.target.value,
+                        },
+                      })
+                    }
                   />
                 </div>
 
@@ -239,8 +197,13 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-city"
                     aria-describedby="city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
+                    value={formData.address.city}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, city: e.target.value },
+                      })
+                    }
                   />
 
                   <div className="mb-3">
@@ -252,8 +215,16 @@ function RegistrationForm() {
                       className="form-control"
                       id="input-pin"
                       aria-describedby="pin-code"
-                      value={pin}
-                      onChange={(e) => setPin(e.target.value)}
+                      value={formData.address.pin}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          address: {
+                            ...formData.address,
+                            pin: e.target.value,
+                          },
+                        })
+                      }
                     />
 
                     <div className="mb-3">
@@ -265,8 +236,16 @@ function RegistrationForm() {
                         className="form-control"
                         id="input-country"
                         aria-describedby="country"
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        value={formData.address.country}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            address: {
+                              ...formData.address,
+                              country: e.target.value,
+                            },
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -288,8 +267,16 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-name-on-card"
                     aria-describedby="name on card"
-                    value={nameOnCard}
-                    onChange={(e) => setNameOnCard(e.target.value)}
+                    value={formData.payments.nameOnCard}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        payments: {
+                          ...formData.payments,
+                          nameOnCard: e.target.value,
+                        },
+                      })
+                    }
                   />
                 </div>
 
@@ -302,8 +289,16 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-card"
                     aria-describedby="card"
-                    value={cardNo}
-                    onChange={(e) => setCardNo(e.target.value)}
+                    value={formData.payments.cardNo}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        payments: {
+                          ...formData.payments,
+                          cardNo: e.target.value,
+                        },
+                      })
+                    }
                   />
                 </div>
 
@@ -317,8 +312,16 @@ function RegistrationForm() {
                       className="form-control"
                       id="input-valid-from"
                       aria-describedby="valid-from"
-                      value={validFrom}
-                      onChange={(e) => setValidFrom(e.target.value)}
+                      value={formData.payments.validFrom}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          payments: {
+                            ...formData.payments,
+                            validFrom: e.target.value,
+                          },
+                        })
+                      }
                     />
                   </div>
 
@@ -331,8 +334,16 @@ function RegistrationForm() {
                       className="form-control"
                       id="input-valid-through"
                       aria-describedby="valid-from"
-                      value={validUpto}
-                      onChange={(e) => setValidUpto(e.target.value)}
+                      value={formData.payments.validUpto}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          payments: {
+                            ...formData.payments,
+                            validUpto: e.target.value,
+                          },
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -346,8 +357,16 @@ function RegistrationForm() {
                     className="form-control"
                     id="input-cvv"
                     aria-describedby="cvv"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value)}
+                    value={formData.payments.cvv}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        payments: {
+                          ...formData.payments,
+                          cvv: e.target.value,
+                        },
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -357,7 +376,7 @@ function RegistrationForm() {
               className="d-grid mx-auto mt-3 gap-3"
               style={{ maxWidth: "50rem" }}
             >
-              {selectedUser?._id ? (
+              {user?._id ? (
                 <button
                   className="btn btn-primary btn-lg"
                   type="button"
@@ -379,7 +398,7 @@ function RegistrationForm() {
                 </button>
               )}
 
-              {selectedUser?._id && (
+              {user?._id && (
                 <button
                   className="btn btn-primary btn-lg"
                   type="button"
@@ -427,4 +446,4 @@ function RegistrationForm() {
   );
 }
 
-export default RegistrationForm;
+export default RegistrationFormLayout;

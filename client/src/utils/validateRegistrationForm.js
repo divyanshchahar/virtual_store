@@ -1,21 +1,22 @@
 function validateRegistrationForm({
   name,
   email,
-  authId,
+  password,
   address: { house, street, city, pin, country },
-  payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
+  payments: { cardNo, nameOnCard, validFrom, validUpto, cvv },
 }) {
-  const data = {
+  const userData = {
     name,
     email,
-    authId,
+    password,
     address: { house, street, city, pin, country },
-    payment: { cardNo, nameOnCard, validFrom, validUpto, cvv },
+    payments: { cardNo, nameOnCard, validFrom, validUpto, cvv },
   };
 
   const attributeNames = {
     name: "Name",
     email: "e-mail",
+    password: "password",
     house: "House/Apartment No",
     street: "Street",
     city: "City",
@@ -29,26 +30,38 @@ function validateRegistrationForm({
   };
 
   let alertShown = false;
+  const pattern = /\s/g;
 
   if (
-    (typeof data.name === "undefined" || data.name.length === 0) &&
-    !alertShown
+    typeof userData.name !== "string" ||
+    (userData.name.replace(pattern, "").length === 0 && !alertShown)
   ) {
     alertShown = true;
     alert(`${attributeNames.name} cannot be blank`);
   }
 
   if (
-    (typeof data.email === "undefined" || data.email.length === 0) &&
+    (typeof userData.email !== "string" ||
+      userData.email.replace(pattern, "").length === 0) &&
     !alertShown
   ) {
     alertShown = true;
     alert(`${attributeNames.email} cannot be blank`);
   }
 
-  Object.entries(data.address).map((item) => {
+  if (
+    (typeof userData.password !== "string" ||
+      userData.password.replace(pattern, "").length === 0) &&
+    !alertShown
+  ) {
+    alertShown = true;
+    alert(`${attributeNames.password} cannot be blank`);
+  }
+
+  Object.entries(userData.address).map((item) => {
     if (
-      (typeof item[1] === "undefined" || item[1].length === 0) &&
+      (typeof item[1] !== "string" ||
+        item[1].replace(pattern, "").length === 0) &&
       !alertShown
     ) {
       alertShown = true;
@@ -56,9 +69,10 @@ function validateRegistrationForm({
     }
   });
 
-  Object.entries(data.payment).map((item) => {
+  Object.entries(userData.payments).map((item) => {
     if (
-      (typeof item[1] === "undefined" || item[1].length === 0) &&
+      (typeof item[1] !== "string" ||
+        item[1].replace(pattern, "").length === 0) &&
       !alertShown
     ) {
       alertShown = true;

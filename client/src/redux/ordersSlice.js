@@ -11,7 +11,7 @@ const initialState = {
 // POST
 export const ordersPostRequest = createAsyncThunk(
   "orders/ordersPostRequest",
-  async ({ acessToken, orderData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.orders, {
         method: "POST",
@@ -19,7 +19,7 @@ export const ordersPostRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify(body),
       });
 
       const json = await response.json();
@@ -34,9 +34,9 @@ export const ordersPostRequest = createAsyncThunk(
 // GET
 export const ordersGetRequest = createAsyncThunk(
   "orders/ordersGetRequest",
-  async ({ acessToken, customerId }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.orders}/${customerId}`, {
+      const response = await fetch(apiEndPoints.orders, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },

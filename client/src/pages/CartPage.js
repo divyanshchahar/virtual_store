@@ -1,79 +1,62 @@
-import { usersGetRequest } from "../redux/usersSlice";
-import { cartGetRequest } from "../redux/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
-import NoItemsLayout from "../layouts/NoItemsLayout";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import ReducerStatus from "../assets/ReducerStatus";
 import CartLayout from "../layouts/CartLayout";
+import ErrorLayout from "../layouts/ErrorLayout";
+import LoadingLayout from "../layouts/LoadingLayout";
+import NoItemsLayout from "../layouts/NoItemsLayout";
 
 function CartPage() {
-  const cart = useSelector((state) => state.cart.cart);
-  const selectedUser = useSelector((state) => state.users.users);
+  const cart = useSelector((state) => state.cart);
+  const products = useSelector((state) => state.products.products);
 
-  const products = useSelector((state) =>
-    state.products.products.filter((item) => productIds.includes(item._id))
-  );
+  const [cartData, setCartData] = useState([]);
 
-  const productIds = cart?.products?.map((item) => item.productId) || [];
-
-  const { getAccessTokenSilently, user, isAuthenticated, isLoading } =
-    useAuth0();
-  const dispatch = useDispatch();
-
-  // LOADING USER DETAILS ON RENDER
+  // processing data for cart layout on render
   useEffect(() => {
-    const setUserOnPageLoad = async () => {
-      try {
-        if (isAuthenticated && !isLoading) {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:users",
-            },
-          });
-          const authId = user.sub;
-          const data = { authId, acessToken };
-          dispatch(usersGetRequest(data));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    setUserOnPageLoad();
-  }, [user]);
+    if (
+      cart.status === ReducerStatus.fulfilled &&
+      cart.cart?.products?.length > 0
+    ) {
+      const productIds = cart.cart.products.map((item) => item.productId);
 
-  // LOADING USER ON RENDER
-  useEffect(() => {
-    const setCartOnPageLoad = async () => {
-      try {
-        if (selectedUser._id) {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:carts",
-            },
-          });
+      const filteredProducts = products.filter((item) =>
+        productIds.includes(item._id)
+      );
 
-          const customerId = selectedUser._id;
-          const data = { acessToken, customerId };
+      let processedData = [];
 
-          dispatch(cartGetRequest(data));
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+      filteredProducts.forEach((filteredProductItem) => {
+        cart.cart.products.map((cartItem) => {
+          if (cartItem.productId === filteredProductItem._id) {
+            processedData.push({ ...filteredProductItem, qty: cartItem.qty });
+          }
+        });
+      });
 
-    setCartOnPageLoad();
-  }, [selectedUser]);
+      setCartData(processedData);
+    }
+  }, [cart]);
 
   return (
     <>
-      {cart?.products?.length > 0 ? (
-        <CartLayout props={(cart, selectedUser, products)} />
+      {cart.status === ReducerStatus.pending ? <LoadingLayout /> : <></>}
+
+      {cart.status === ReducerStatus.rejected ? <ErrorLayout /> : <></>}
+
+      {cart.cart?.products?.length > 0 && cartData.length > 0 ? (
+        <CartLayout cartData={cartData} />
       ) : (
-        <NoItemsLayout />
+        <></>
       )}
+
+      {cart.cart?.products?.length > 0 && !cartData.length > 0 ? (
+        <LoadingLayout />
+      ) : (
+        <></>
+      )}
+
+      {cart.cart?.products?.length === 0 ? <NoItemsLayout /> : <></>}
     </>
   );
 }

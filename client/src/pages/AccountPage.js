@@ -1,7 +1,9 @@
-import RegistrationForm from "../layouts/RegistrationForm";
+import RegistrationFormLayout from "../layouts/RegistrationFormLayout";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function AccountPage() {
-  return <RegistrationForm />;
+  return <RegistrationFormLayout />;
 }
 
 export default AccountPage;

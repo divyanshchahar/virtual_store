@@ -1,14 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import { resetUser } from "../redux/usersSlice";
-import { resetCart } from "../redux/cartSlice";
-import { resetOrders } from "../redux/ordersSlice";
-import { useDispatch } from "react-redux";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContextProvider";
 
 function TopNavBar() {
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { isLoggedIn, logout } = useContext(AuthContext);
 
   return (
     <nav className="navbar navbar-expand-md bg-body-tertiary">
@@ -65,28 +61,19 @@ function TopNavBar() {
           >
             <ul className="navbar-nav">
               <li className="nav-item">
-                {isAuthenticated ? (
+                {isLoggedIn ? (
                   <button
                     className="nav-link"
                     onClick={() => {
-                      dispatch(resetUser());
-                      dispatch(resetCart());
-                      dispatch(resetOrders());
-
-                      logout({
-                        logoutParams: { returnTo: window.location.origin },
-                      });
+                      logout();
                     }}
                   >
                     Logout
                   </button>
                 ) : (
-                  <button
-                    className="nav-link"
-                    onClick={() => loginWithRedirect()}
-                  >
+                  <Link to="login" className="nav-link">
                     Login
-                  </button>
+                  </Link>
                 )}
               </li>
 

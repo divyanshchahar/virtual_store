@@ -11,7 +11,7 @@ const initialState = {
 // POST
 export const cartPostRequest = createAsyncThunk(
   "cart/cartPostRequest",
-  async ({ acessToken, cartData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
         method: "POST",
@@ -19,10 +19,10 @@ export const cartPostRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(cartData),
+        body: JSON.stringify(body),
       });
 
-      const json = response.json();
+      const json = await response.json();
 
       return { ok: response.ok, body: json };
     } catch (error) {
@@ -34,9 +34,9 @@ export const cartPostRequest = createAsyncThunk(
 // GET
 export const cartGetRequest = createAsyncThunk(
   "cart/cartGetRequest",
-  async ({ acessToken, customerId }) => {
+  async ({ acessToken }) => {
     try {
-      const response = await fetch(`${apiEndPoints.cart}/${customerId}`, {
+      const response = await fetch(apiEndPoints.cart, {
         headers: {
           Authorization: `Bearer ${acessToken}`,
         },
@@ -54,7 +54,7 @@ export const cartGetRequest = createAsyncThunk(
 // PUT
 export const cartPutRequest = createAsyncThunk(
   "cart/cartPutRequest",
-  async ({ acessToken, cartData }) => {
+  async ({ acessToken, body }) => {
     try {
       const response = await fetch(apiEndPoints.cart, {
         method: "PUT",
@@ -62,10 +62,32 @@ export const cartPutRequest = createAsyncThunk(
           "Content-Type": "application/json",
           Authorization: `Bearer ${acessToken}`,
         },
-        body: JSON.stringify(cartData),
+        body: JSON.stringify(body),
       });
 
-      const json = response.json();
+      const json = await response.json();
+
+      return { ok: response.ok, body: json };
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
+// DELETE
+export const cartDeleteRequest = createAsyncThunk(
+  "cart/cartDeleteRequest",
+  async ({ acessToken }) => {
+    try {
+      const response = await fetch(apiEndPoints.cart, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${acessToken}`,
+        },
+      });
+
+      const json = await response.json();
 
       return { ok: response.ok, body: json };
     } catch (error) {
@@ -149,6 +171,28 @@ const cartSlice = createSlice({
         }
       })
       .addCase(cartPutRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.cart = {};
+        state.error = null || action.payload;
+      })
+      // DELETE
+      .addCase(cartDeleteRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.cart = {};
+        state.error = null;
+      })
+      .addCase(cartDeleteRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.cart = {};
+          state.error = null || action.payload?.body;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.cart = action.payload.body;
+          state.error = null;
+        }
+      })
+      .addCase(cartDeleteRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
         state.error = null || action.payload;

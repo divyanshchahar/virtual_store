@@ -30,55 +30,55 @@ function ProductsListPage() {
   }, []);
 
   // setting user state(global) on page load
-  useEffect(() => {
-    const setUserOnPageLoad = async () => {
-      try {
-        if (isAuthenticated && !isLoading) {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:users",
-            },
-          });
+  // useEffect(() => {
+  //   const setUserOnPageLoad = async () => {
+  //     try {
+  //       if (isAuthenticated && !isLoading) {
+  //         const acessToken = await getAccessTokenSilently({
+  //           authorizationParams: {
+  //             audience: process.env.REACT_APP_AUDIENCE,
+  //             scope: "write:users",
+  //           },
+  //         });
 
-          dispatch(
-            usersGetRequest({ authId: user?.sub, acessToken: acessToken })
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //         dispatch(
+  //           usersGetRequest({ authId: user?.sub, acessToken: acessToken })
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    setUserOnPageLoad();
-  }, [user]);
+  //   setUserOnPageLoad();
+  // }, [user]);
 
-  // setting cart state (global) on page load
-  useEffect(() => {
-    const setCartOnPageLoad = async () => {
-      try {
-        if (selectedUser?._id) {
-          const acessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: process.env.REACT_APP_AUDIENCE,
-              scope: "write:carts",
-            },
-          });
+  // // setting cart state (global) on page load
+  // useEffect(() => {
+  //   const setCartOnPageLoad = async () => {
+  //     try {
+  //       if (selectedUser?._id) {
+  //         const acessToken = await getAccessTokenSilently({
+  //           authorizationParams: {
+  //             audience: process.env.REACT_APP_AUDIENCE,
+  //             scope: "write:carts",
+  //           },
+  //         });
 
-          dispatch(
-            cartGetRequest({
-              acessToken: acessToken,
-              customerId: selectedUser?._id,
-            })
-          );
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //         dispatch(
+  //           cartGetRequest({
+  //             acessToken: acessToken,
+  //             customerId: selectedUser?._id,
+  //           })
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    setCartOnPageLoad();
-  }, [selectedUser]);
+  //   setCartOnPageLoad();
+  // }, [selectedUser]);
 
   return (
     <>
@@ -89,7 +89,7 @@ function ProductsListPage() {
       {products.status === reducerStatus.rejected && <ErrorLayout />}
 
       {products.status === reducerStatus.fulfilled && (
-        <ProductsListLayout porps={(products, selectedUser, cart)} />
+        <ProductsListLayout products={products.products} />
       )}
     </>
   );
