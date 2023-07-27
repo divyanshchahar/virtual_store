@@ -13,7 +13,7 @@
     "mongoose": "^7.0.3"
   },
   "scripts": {
-    "devStart": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
