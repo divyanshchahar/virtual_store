@@ -13,6 +13,6 @@
     "concurrently": "^7.6.0"
   },
   "scripts": {
-    "devStart": "concurrently \"yarn workspace server devStart\" \"yarn workspace client start\""
+    "dev": "concurrently \"yarn workspace server dev\" \"yarn workspace client start\""
   }
 }

@@ -24,7 +24,9 @@ const corsOption = {
 app.use(cors(corsOption));
 app.use(express.json());
 
-mongoose.connect(process.env.DATABASE);
+mongoose.connect(process.env.DATABASE).catch((error) => {
+  console.log(error);
+});
 
 app.use("/products", productsRouter);
 app.use("/users", userRouter);
