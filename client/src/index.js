@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-
 import { Provider } from "react-redux";
-import store from "../src/redux/store";
-
 import { BrowserRouter } from "react-router-dom";
+import store from "../src/redux/store";
+import App from "./App";
 import { AuthContextProvider } from "./context/AuthContextProvider";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import ErrorBoundary from "./componenets/ErrorBoundriy";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,7 +15,9 @@ root.render(
     <AuthContextProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </BrowserRouter>
       </Provider>
     </AuthContextProvider>
