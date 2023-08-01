@@ -40,11 +40,11 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
       user.address.pin = req?.body?.address?.pin;
       user.address.country = req?.body?.address?.country;
 
-      user.payments.nameOnCard = req?.body?.payments.nameOnCard;
-      user.payments.cardNo = req?.body?.payments.cardNo;
-      user.payments.validFrom = req?.body?.payments.validFrom;
-      user.payments.validUpto = req?.body?.payments.validUpto;
-      user.payments.cvv = req?.body?.payments.cvv;
+      user.payments.nameOnCard = req?.body?.payments?.nameOnCard;
+      user.payments.cardNo = req?.body?.payments?.cardNo;
+      user.payments.validFrom = req?.body?.payments?.validFrom;
+      user.payments.validUpto = req?.body?.payments?.validUpto;
+      user.payments.cvv = req?.body?.payments?.cvv;
 
       const updatedUser = await user.save();
 
