@@ -6,20 +6,15 @@ const authorizationMiddleware = require("../middleware/authorizationMiddleware")
 
 const router = express.Router();
 
-// GET ROUTE
-// note: This route returns an empty object if the user cart is not found.
-// It is done on purpose so as to stop the front end from crashing
-
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
     const [cart] = await Cart.find({ customerId: req.id });
 
-    // returning empty object if user has not cart
-    if (!cart) return res.status(200).send({});
+    if (!cart) return res.status(404);
 
     res.status(200).send(cart);
   } catch (error) {
-    res.send(error.message).status(404);
+    res.status(500).send(error);
   }
 });
 
