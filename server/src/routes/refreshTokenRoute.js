@@ -11,13 +11,13 @@ router.route("/").post(async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) return res.sendStatus(401);
+    if (!refreshToken) return res.status(401);
 
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (error, decoded) => {
-        if (error) return res.sendStatus(403);
+        if (error) return res.status(403);
 
         const acessToken = jwt.sign(
           { id: decoded.id.toString() },
@@ -31,8 +31,7 @@ router.route("/").post(async (req, res) => {
       }
     );
   } catch (error) {
-    console.log(error.message);
-    res.send(error.message).status(500);
+    res.status(500).send(error);
   }
 });
 
