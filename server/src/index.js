@@ -11,6 +11,7 @@ const loginRouter = require("./routes/loginRoute");
 const refreshTokenRouter = require("./routes/refreshTokenRoute");
 const logoutRouter = require("./routes/logoutRoute");
 const changePasswordRouter = require("./routes/changePasswordRoute");
+const emptyCartRouter = require("./routes/emptyCartRoute");
 
 require("dotenv").config();
 
@@ -38,5 +39,6 @@ app.use("/login", loginRouter);
 app.use("/refreshToken", refreshTokenRouter);
 app.use("/logout", logoutRouter);
 app.use("/changepassword", changePasswordRouter);
+app.use("/emptycart", emptyCartRouter);
 
 app.listen(3200);
