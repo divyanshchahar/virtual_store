@@ -5,6 +5,7 @@ import reducerStatus from "../assets/ReducerStatus";
 const initialState = {
   users: {},
   status: "idle",
+  response: null,
   error: null,
 };
 
@@ -24,9 +25,10 @@ export const usersPostRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json.user };
+      // post requests object contains both user object and acess token
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -44,9 +46,9 @@ export const usersGetRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
-      return error.messgae;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -67,9 +69,9 @@ export const usersPutRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -88,9 +90,9 @@ export const usersDeleteRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.messgae;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -106,88 +108,104 @@ const usersSlice = createSlice({
         state.status = reducerStatus.pending;
         state.users = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(usersPostRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.users = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.users = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(usersPostRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
         state.error = null || action.payload;
+        state.response = action.payload.response;
       })
       // GET REQUEST
       .addCase(usersGetRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.users = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(usersGetRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.users = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.users = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(usersGetRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
         state.error = null || action.payload;
+        state.response = action.payload.response;
       })
       // PUT REQUEST
       .addCase(usersPutRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.users = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(usersPutRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.users = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.users = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(usersPutRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
         state.error = null || action.payload;
+        state.response = action.payload.response;
       })
       // DELETE REQUEST
       .addCase(usersDeleteRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.users = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(usersDeleteRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.users = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.users = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(usersDeleteRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
         state.error = null || action.payload;
+        state.response = action.payload.response;
       });
   },
 });
