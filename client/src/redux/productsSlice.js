@@ -51,7 +51,7 @@ const productsSlice = createSlice({
       .addCase(getProductsApi.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.products = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
         state.response = action.payload.response;
       });
   },
