@@ -48,12 +48,12 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
       const updatedUser = await user.save();
 
-      return res.send(updatedUser).status(200);
+      return res.send(updatedUser).status(200).end();
     }
 
-    return res.send(user).status(401);
+    return res.send(user).status(401).end();
   } catch (error) {
-    return res.status(500).send(error);
+    return res.status(500).send(error).end();
   }
 });
 
@@ -61,10 +61,10 @@ router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
     const isDeleted = await User.findByIdAndDelete(req.id);
 
-    if (!isDeleted) return res.sendStatus(400);
-    res.status(200).send({});
+    if (!isDeleted) return res.status(400).end();
+    res.status(200).send({}).end();
   } catch (error) {
-    res.satus(500).send(error);
+    res.status(500).send(error).end;
   }
 });
 
