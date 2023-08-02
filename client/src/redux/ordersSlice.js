@@ -60,6 +60,7 @@ const ordersSlice = createSlice({
       state.status = reducerStatus.fulfilled;
       state.error = null;
       state.orders = [];
+      state.response = null;
     },
   },
 
