@@ -16,7 +16,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
     res.status(200).send(updatedCart).end();
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send(error).end();
   }
 });
 
