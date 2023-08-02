@@ -11,7 +11,7 @@ router.route("/").post(async (req, res) => {
 
     const [user] = await User.find({ email: req.body.email });
 
-    if (!user) return res.sendStatus(404);
+    if (!user) return res.status(404);
 
     const isAuthenticatd = await bcrypt.compare(
       req.body.password,
@@ -41,12 +41,13 @@ router.route("/").post(async (req, res) => {
           maxAge: 24 * 60 * 60 * 1000,
         })
         .send({ acessToken: acessToken })
-        .status(200);
+        .status(200)
+        .end();
     }
 
-    res.sendStatus(401);
+    res.status(401).end();
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send(error.message).end();
   }
 });
 
