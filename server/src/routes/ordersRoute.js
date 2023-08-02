@@ -6,24 +6,22 @@ const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    // if (!req.params.customerId) return res.sendStatus(400);
-
     const orders = await Orders.find({ customerId: req.id });
 
-    if (!orders) return res.sendStatus(404);
+    if (!orders) return res.status(404).end();
 
-    res.status(200).send(orders);
+    res.status(200).send(orders).end();
   } catch (error) {
-    res.status(500).send(error.mesage);
+    res.status(500).send(error).end();
   }
 });
 
 router.route("/").post(authorizationMiddleware, async (req, res) => {
   try {
     const orders = await Orders.create({ customerId: req.id, ...req.body });
-    res.send(orders).status(200);
+    res.status(200).send(orders).end();
   } catch (error) {
-    res.status(500).send(error.mesage);
+    res.status(500).send(error).end();
   }
 });
 

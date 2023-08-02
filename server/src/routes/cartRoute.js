@@ -6,58 +6,56 @@ const authorizationMiddleware = require("../middleware/authorizationMiddleware")
 
 const router = express.Router();
 
-// GET ROUTE
-// note: This route returns an empty object if the user cart is not found.
-// It is done on purpose so as to stop the front end from crashing
-
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
     const [cart] = await Cart.find({ customerId: req.id });
 
-    // returning empty object if user has not cart
-    if (!cart) return res.status(200).send({});
+    if (!cart) return res.status(404).end();
 
-    res.status(200).send(cart);
+    res.status(200).send(cart).end();
   } catch (error) {
-    res.send(error.message).status(404);
+    res.status(500).send(error).end();
   }
 });
 
 router.route("/").post(authorizationMiddleware, async (req, res) => {
   try {
-    if (!req.body.productId) return res.sendStatus(400);
+    let hasQty = false;
 
+    if (req?.body?.qty || req?.body?.qty === 0) hasQty = true;
+
+    if (!req.body.productId || !hasQty) return res.status(400).end();
+
+    if (typeof req.body.qty === "undefined" || "null") res.status(400).end();
     const isProduct = await Product.findById(req.body.productId);
 
-    if (!isProduct) return res.sendStatus(404);
+    if (!isProduct) return res.status(404).end();
 
     const cart = await Cart.create({
-      customerId: null || req.id,
-      products: [
-        { productId: null || req.body.productId, qty: null || req.body.qty },
-      ],
+      customerId: req.id,
+      products: [{ productId: req.body.productId, qty: req.body.qty }],
     });
 
-    res.sendStatus(200);
+    res.status(200).send(cart).end();
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send(error).end();
   }
 });
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
     let itemNotPresent = true;
-    let isQty = false;
+    let hasQty = false;
 
-    if (req?.body?.qty || req?.body?.qty === 0) isQty = true;
+    if (req?.body?.qty || req?.body?.qty === 0) hasQty = true;
 
-    if (!req.body.productId || !isQty) return res.sendStatus(400);
+    if (!req.body.productId || !hasQty) return res.status(400).end();
 
     const isCustomer = await User.findById(req.id);
     const isProduct = await Product.findById(req.body.productId);
     const [cart] = await Cart.find({ customerId: req.id });
 
-    if (!isCustomer || !isProduct || !cart) return res.sendStatus(404);
+    if (!isCustomer || !isProduct || !cart) return res.status(404).end();
 
     // updating product quantity
     cart.products = cart.products.map((item) => {
@@ -79,19 +77,19 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
     const updatedCart = await cart.save();
 
-    res.status(200).send(updatedCart);
+    res.status(200).send(updatedCart).end();
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).send(error).end();
   }
 });
 
 router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
     const { isDeleted } = await Cart.deleteOne({ customerId: req.id });
-    if (isDeleted.deletecount > 0) return res.status(200);
-    return res.status(404);
+    if (isDeleted.deletecount > 0) return res.status(200).send({}).end();
+    return res.status(404).end();
   } catch (error) {
-    return res.send(error).status(500);
+    return res.send(error).status(500).end();
   }
 });
 

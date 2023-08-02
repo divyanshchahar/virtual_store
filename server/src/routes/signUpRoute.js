@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("/").post(async (req, res) => {
   try {
-    if (!req.body.password || !req.body.email) return res.sendStatus(400);
+    if (!req.body.password || !req.body.email) return res.status(400).end();
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const hashedUser = { ...req.body, password: hashedPassword };
@@ -40,8 +40,7 @@ router.route("/").post(async (req, res) => {
       })
       .status(200);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(error.message);
+    res.status(500).send(error).end();
   }
 });
 
