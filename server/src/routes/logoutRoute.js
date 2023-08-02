@@ -10,8 +10,7 @@ router.route("/").delete(async (req, res) => {
 
     res.end();
   } catch (error) {
-    console.log(error.message);
-    res.sendStatus(500);
+    res.status(500).send(error).end();
   }
 });
 
