@@ -2,7 +2,7 @@ const Cart = require("../schema/cartSchema");
 const express = require("express");
 const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 
-const router = express.Router;
+const router = express.Router();
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
