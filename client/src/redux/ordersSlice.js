@@ -5,6 +5,7 @@ import reducerStatus from "../assets/ReducerStatus";
 const initialState = {
   orders: [],
   status: "idle",
+  response: null,
   error: null,
 };
 
@@ -24,9 +25,9 @@ export const ordersPostRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -46,7 +47,7 @@ export const ordersGetRequest = createAsyncThunk(
 
       return { ok: response.ok, body: json };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -67,46 +68,54 @@ const ordersSlice = createSlice({
       // POST REQUEST
       .addCase(ordersPostRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
-        state.orders = [];
+        state.orders = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(ordersPostRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
-          state.orders = [];
-          state.error = null || action.payload?.body;
+          state.orders = {};
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.orders = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(ordersPostRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
-        state.orders = [];
-        state.error = action.payload.body;
+        state.products = {};
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       })
       // GET REQUEST
       .addCase(ordersGetRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
-        state.orders = [];
+        state.orders = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(ordersGetRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
-          state.orders = [];
-          state.error = null || action.payload?.body;
+          state.orders = {};
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.orders = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(ordersGetRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
-        state.orders = [];
-        state.error = action.payload.body;
+        state.products = {};
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       });
   },
 });
