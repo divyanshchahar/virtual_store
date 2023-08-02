@@ -16,7 +16,7 @@ export const getProductsApi = createAsyncThunk(
     try {
       const response = await fetch(apiEndPoints.products);
       const json = await response.json();
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
@@ -50,7 +50,7 @@ const productsSlice = createSlice({
       })
       .addCase(getProductsApi.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
-        state.users = {};
+        state.products = {};
         state.error = null || action.payload;
         state.response = action.payload.response;
       });
