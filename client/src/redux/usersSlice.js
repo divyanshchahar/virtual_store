@@ -126,7 +126,7 @@ const usersSlice = createSlice({
       .addCase(usersPostRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
         state.response = action.payload.response;
       })
       // GET REQUEST
@@ -152,7 +152,7 @@ const usersSlice = createSlice({
       .addCase(usersGetRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
         state.response = action.payload.response;
       })
       // PUT REQUEST
@@ -178,7 +178,7 @@ const usersSlice = createSlice({
       .addCase(usersPutRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
         state.response = action.payload.response;
       })
       // DELETE REQUEST
@@ -204,7 +204,7 @@ const usersSlice = createSlice({
       .addCase(usersDeleteRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.users = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
         state.response = action.payload.response;
       });
   },
