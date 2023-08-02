@@ -5,6 +5,7 @@ import reducerStatus from "../assets/ReducerStatus";
 const initialState = {
   cart: {},
   status: "idle",
+  response: null,
   error: null,
 };
 
@@ -24,9 +25,9 @@ export const cartPostRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -44,9 +45,9 @@ export const cartGetRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -67,9 +68,9 @@ export const cartPutRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -89,9 +90,9 @@ export const cartDeleteRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json };
+      return { ok: response.ok, body: json.user, response: response.status };
     } catch (error) {
-      return error.message;
+      return { ok: false, body: {}, response: 500, error: error };
     }
   }
 );
@@ -104,6 +105,7 @@ const cartSlice = createSlice({
       state.status = reducerStatus.fulfilled;
       state.cart = {};
       state.error = null;
+      state.response = null;
     },
   },
 
@@ -114,88 +116,104 @@ const cartSlice = createSlice({
         state.status = reducerStatus.pending;
         state.cart = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(cartPostRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.cart = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.cart = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(cartPostRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       })
       // GET REQUEST
       .addCase(cartGetRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.cart = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(cartGetRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.cart = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.cart = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(cartGetRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       })
       // PUT REQUEST
       .addCase(cartPutRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.cart = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(cartPutRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.cart = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.cart = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(cartPutRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       })
       // DELETE
       .addCase(cartDeleteRequest.pending, (state, action) => {
         state.status = reducerStatus.pending;
         state.cart = {};
         state.error = null;
+        state.response = null;
       })
       .addCase(cartDeleteRequest.fulfilled, (state, action) => {
         if (!action.payload.ok || typeof action.payload.body !== "object") {
           state.status = reducerStatus.rejected;
           state.cart = {};
-          state.error = null || action.payload?.body;
+          state.error = null;
+          state.response = action.payload.response;
         } else {
           state.status = reducerStatus.fulfilled;
           state.cart = action.payload.body;
           state.error = null;
+          state.response = action.payload.response;
         }
       })
       .addCase(cartDeleteRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
-        state.error = null || action.payload;
+        state.error = action.payload.error;
+        state.response = action.payload.response;
       });
   },
 });
