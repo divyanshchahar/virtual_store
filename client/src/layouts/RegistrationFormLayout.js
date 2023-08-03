@@ -17,7 +17,6 @@ function RegistrationFormLayout() {
 
   const dispatch = useDispatch();
   const makeAuthRequest = useMakeAuthRequest();
-  const { logout } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -82,7 +81,6 @@ function RegistrationFormLayout() {
   // function to execute delete operation (DELETE request)
   const deleteUser = () => {
     makeAuthRequest(user, usersDeleteRequest);
-    // logout();
   };
 
   return (
