@@ -88,9 +88,9 @@ export const usersDeleteRequest = createAsyncThunk(
         },
       });
 
-      const json = await response.json();
+      await response.json();
 
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: {}, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
