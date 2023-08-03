@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AuthContext from "../context/AuthContextProvider";
 import useAutoLogin from "../hooks/useAutoLogin";
 import useAutoLogout from "../hooks/useAutoLogout";
 import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
