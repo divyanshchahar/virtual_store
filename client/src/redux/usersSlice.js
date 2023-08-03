@@ -100,7 +100,14 @@ export const usersDeleteRequest = createAsyncThunk(
 const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser: (state) => {
+      state.status = reducerStatus.fulfilled;
+      state.error = null;
+      state.users = {};
+      state.response = null;
+    },
+  },
   extraReducers(builder) {
     builder
       //POST REQUEST
