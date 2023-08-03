@@ -1,8 +1,8 @@
-import useOperateCart from "../hooks/useOperateCart";
-import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
 import { useSelector } from "react-redux";
-import { ordersPostRequest } from "../redux/ordersSlice";
 import useEmptyCart from "../hooks/useEmptyCart";
+import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
+import useOperateCart from "../hooks/useOperateCart";
+import { ordersPostRequest } from "../redux/ordersSlice";
 
 function CartLayout({ cartData }) {
   const orders = useSelector((state) => state.orders.orders);
