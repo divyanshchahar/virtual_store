@@ -10,7 +10,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
     if (!cart) return res.status(404).end();
 
-    cart.products = {};
+    cart.products = [];
 
     const updatedCart = await cart.save();
 
