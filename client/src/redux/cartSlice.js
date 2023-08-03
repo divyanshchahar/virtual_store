@@ -25,7 +25,7 @@ export const cartPostRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
@@ -45,7 +45,7 @@ export const cartGetRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
@@ -68,7 +68,7 @@ export const cartPutRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
@@ -90,7 +90,29 @@ export const cartDeleteRequest = createAsyncThunk(
 
       const json = await response.json();
 
-      return { ok: response.ok, body: json.user, response: response.status };
+      return { ok: response.ok, body: {}, response: response.status };
+    } catch (error) {
+      return { ok: false, body: {}, response: 500, error: error };
+    }
+  }
+);
+// EMPTY CART ROUTE
+export const cartEmptyRequest = createAsyncThunk(
+  "cart/cartEmptyRequest",
+  async ({ acessToken }) => {
+    try {
+      const response = await fetch(apiEndPoints.emptyCart, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${acessToken}`,
+        },
+        body: JSON.stringify({}),
+      });
+
+      const json = await response.json();
+
+      return { ok: response.ok, body: json, response: response.status };
     } catch (error) {
       return { ok: false, body: {}, response: 500, error: error };
     }
@@ -210,6 +232,32 @@ const cartSlice = createSlice({
         }
       })
       .addCase(cartDeleteRequest.rejected, (state, action) => {
+        state.status = reducerStatus.rejected;
+        state.cart = {};
+        state.error = action.payload.error;
+        state.response = action.payload.response;
+      })
+      // EMPTY CART
+      .addCase(cartEmptyRequest.pending, (state, action) => {
+        state.status = reducerStatus.pending;
+        state.cart = {};
+        state.error = null;
+        state.response = null;
+      })
+      .addCase(cartEmptyRequest.fulfilled, (state, action) => {
+        if (!action.payload.ok || typeof action.payload.body !== "object") {
+          state.status = reducerStatus.rejected;
+          state.cart = {};
+          state.error = null;
+          state.response = action.payload.response;
+        } else {
+          state.status = reducerStatus.fulfilled;
+          state.cart = action.payload.body;
+          state.error = null;
+          state.response = action.payload.response;
+        }
+      })
+      .addCase(cartEmptyRequest.rejected, (state, action) => {
         state.status = reducerStatus.rejected;
         state.cart = {};
         state.error = action.payload.error;
