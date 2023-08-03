@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../context/AuthContextProvider";
 import useAutoLogin from "../hooks/useAutoLogin";
+import useAutoLogout from "../hooks/useAutoLogout";
 import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
 import {
   usersDeleteRequest,
@@ -10,7 +11,6 @@ import {
   usersPutRequest,
 } from "../redux/usersSlice";
 import validateRegistrationForm from "../utils/validateRegistrationForm";
-import useAutoLogout from "../hooks/useAutoLogout";
 
 function RegistrationFormLayout() {
   const user = useSelector((state) => state.users.users);
