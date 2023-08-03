@@ -1,9 +1,21 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContextProvider";
+import { resetCart } from "../redux/cartSlice";
+import { resetOrders } from "../redux/ordersSlice";
+import { resetUser } from "../redux/usersSlice";
 
 function TopNavBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const makeLogoutRequest = () => {
+    logout();
+    dispatch(resetCart());
+    dispatch(resetOrders());
+    dispatch(resetUser());
+  };
   const { isLoggedIn, logout } = useContext(AuthContext);
 
   return (
@@ -65,7 +77,7 @@ function TopNavBar() {
                   <button
                     className="nav-link"
                     onClick={() => {
-                      logout();
+                      makeLogoutRequest();
                     }}
                   >
                     Logout

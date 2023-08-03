@@ -1,8 +1,8 @@
-import useOperateCart from "../hooks/useOperateCart";
-import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
 import { useSelector } from "react-redux";
+import useEmptyCart from "../hooks/useEmptyCart";
+import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
+import useOperateCart from "../hooks/useOperateCart";
 import { ordersPostRequest } from "../redux/ordersSlice";
-import { cartPutRequest, cartDeleteRequest } from "../redux/cartSlice";
 
 function CartLayout({ cartData }) {
   const orders = useSelector((state) => state.orders.orders);
@@ -12,6 +12,7 @@ function CartLayout({ cartData }) {
   const { addItem, removeItem } = useOperateCart();
   const makeAuthRequest = useMakeAuthRequest();
 
+  // FUNCTION TO PLACE ORDERS
   const placeOrder = () => {
     const products = cartData.map((item) => {
       return { productId: item._id, qty: item.qty };
@@ -23,8 +24,9 @@ function CartLayout({ cartData }) {
     };
 
     makeAuthRequest(orders, ordersPostRequest, ordersBody);
-    makeAuthRequest(cart, cartDeleteRequest);
   };
+
+  useEmptyCart();
 
   return (
     <>

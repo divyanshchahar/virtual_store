@@ -1,11 +1,11 @@
+import { useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import TopNavBar from "../layouts/TopNavBar";
-import { useEffect, useContext } from "react";
 import AuthContext from "../context/AuthContextProvider";
 import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
-import { useSelector } from "react-redux";
-import { usersGetRequest } from "../redux/usersSlice";
+import TopNavBar from "../layouts/TopNavBar";
 import { cartGetRequest } from "../redux/cartSlice";
+import { usersGetRequest } from "../redux/usersSlice";
 
 function RootPage() {
   const { refreshAuth, isLoggedIn } = useContext(AuthContext);
@@ -33,6 +33,7 @@ function RootPage() {
   const makeRefreshRequest = async () => {
     await refreshAuth();
   };
+
   return (
     <>
       <TopNavBar />

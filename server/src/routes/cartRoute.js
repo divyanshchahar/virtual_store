@@ -26,7 +26,6 @@ router.route("/").post(authorizationMiddleware, async (req, res) => {
 
     if (!req.body.productId || !hasQty) return res.status(400).end();
 
-    if (typeof req.body.qty === "undefined" || "null") res.status(400).end();
     const isProduct = await Product.findById(req.body.productId);
 
     if (!isProduct) return res.status(404).end();
