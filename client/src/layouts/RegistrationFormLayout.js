@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../context/AuthContextProvider";
+import useAutoLogin from "../hooks/useAutoLogin";
 import useMakeAuthRequest from "../hooks/useMakeAuthRequest";
 import {
   usersDeleteRequest,
@@ -9,6 +10,7 @@ import {
   usersPutRequest,
 } from "../redux/usersSlice";
 import validateRegistrationForm from "../utils/validateRegistrationForm";
+import useAutoLogout from "../hooks/useAutoLogout";
 
 function RegistrationFormLayout() {
   const user = useSelector((state) => state.users.users);
@@ -53,6 +55,12 @@ function RegistrationFormLayout() {
     });
   }, [user]);
 
+  // auto login on sucessful user creation
+  useAutoLogin();
+
+  // auto log out on sucessful user deletion
+  useAutoLogout();
+
   // function to register new user (POST request)
   const registerUser = async () => {
     const alertShown = validateRegistrationForm(formData);
@@ -74,7 +82,7 @@ function RegistrationFormLayout() {
   // function to execute delete operation (DELETE request)
   const deleteUser = () => {
     makeAuthRequest(user, usersDeleteRequest);
-    logout();
+    // logout();
   };
 
   return (
@@ -98,6 +106,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-email" className="form-label">
               Email address
@@ -113,6 +122,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-password" className="form-label">
               Password
@@ -155,6 +165,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-street" className="form-label">
               Street
@@ -176,6 +187,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-city" className="form-label">
               City
@@ -197,6 +209,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-pin" className="form-label">
               PIN Code
@@ -218,6 +231,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-country" className="form-label">
               Country
@@ -266,6 +280,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-card" className="form-label">
               Card
@@ -287,6 +302,7 @@ function RegistrationFormLayout() {
               }
             />
           </div>
+
           <div className="row mb-3">
             <div className="col">
               <label htmlFor="input-valid-from" className="form-label">
@@ -332,6 +348,7 @@ function RegistrationFormLayout() {
               />
             </div>
           </div>
+
           <div className="mb-3">
             <label htmlFor="input-cvv" className="form-label">
               CVV
