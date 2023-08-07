@@ -29,22 +29,34 @@ yarn install
 Make a `.env` file in the `../client/` with the following content
 
 ```
-REACT_APP_AUDIENCE= address of the backend
+REACT_APP_AUDIENCEc= URL of the backend
 ```
 
 ### 3. Setup Environment Variables for server
 
 ```
-ORIGIN=URL of react app
+ORIGIN = URL of react app
 
-DATABASE=URL of MongoDB Database
+DATABASE = URL of MongoDB Database
+
+ACESS_TOKEN_SECRET = Secret for acess token
+
+REFRESH_TOKEN_SECRET = Secret for refresh token
 ```
 
-> 1. `name` of type _string_ to describe the name of the product
-> 2. `price` of type _number_ to describe the price of the product
-> 3. `images` of type _array_ to hold address of product images
+### 4.Setting up Database
 
-### 4. Runing the app in developement app
+This app uses a MongoDB Database. To setup this app you will need products data. Products collection should satisfy the following schema requirement for proper functioning of the app.
+
+> `name` of type _string_ to describe the name of the product
+
+> `price` of type _number_ to describe the price of the product
+
+> `images` of type _array_ to hold address of product images
+
+The documents in the Products Collection use the data available at https://dummyjson.com/products
+
+## Running the app in development environment
 
 ```
 yarn run dev
