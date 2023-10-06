@@ -1,5 +1,5 @@
-const express = require("express");
-const Products = require("../schema/productSchema");
+import express from "express";
+import Products from "../schema/productSchema";
 
 const router = express.Router();
 

@@ -1,7 +1,6 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-const User = require("../schema/userSchema");
+import cookieParser from "cookie-parser";
+import express from "express";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 

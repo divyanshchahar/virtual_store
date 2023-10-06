@@ -1,7 +1,7 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../schema/userSchema");
+import bcrypt from "bcrypt";
+import express from "express";
+import jwt from "jsonwebtoken";
+import User from "../schema/userSchema";
 
 const router = express.Router();
 

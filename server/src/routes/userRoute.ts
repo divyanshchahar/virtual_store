@@ -1,6 +1,6 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const User = require("../schema/userSchema");
+import bcrypt from "bcrypt";
+import express from "express";
+import User from "../schema/userSchema";
 
 const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const ordersSchema = new mongoose.Schema({
   customerId: mongoose.SchemaTypes.ObjectId,

@@ -1,19 +1,17 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-
-const productsRouter = require("./routes/productsRoute");
-const userRouter = require("./routes/userRoute");
-const cartRouter = require("./routes/cartRoute");
-const ordersRouter = require("./routes/ordersRoute");
-const signUpRouter = require("./routes/signUpRoute");
-const loginRouter = require("./routes/loginRoute");
-const refreshTokenRouter = require("./routes/refreshTokenRoute");
-const logoutRouter = require("./routes/logoutRoute");
-const changePasswordRouter = require("./routes/changePasswordRoute");
-const emptyCartRouter = require("./routes/emptyCartRoute");
-
-require("dotenv").config();
+import cors from "cors";
+import "dotenv/config";
+import express from "express";
+import mongoose from "mongoose";
+import cartRouter from "./routes/cartRoute";
+import changePasswordRouter from "./routes/changePasswordRoute";
+import emptyCartRouter from "./routes/emptyCartRoute";
+import loginRouter from "./routes/loginRoute";
+import logoutRouter from "./routes/logoutRoute";
+import ordersRouter from "./routes/ordersRoute";
+import productsRouter from "./routes/productsRoute";
+import refreshTokenRouter from "./routes/refreshTokenRoute";
+import signUpRouter from "./routes/signUpRoute";
+import userRouter from "./routes/userRoute";
 
 const app = express();
 

@@ -1,6 +1,6 @@
-const Cart = require("../schema/cartSchema");
-const express = require("express");
-const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+import express from "express";
+import authorizationMiddleware from "../middleware/authorizationMiddleware";
+import Cart from "../schema/cartSchema";
 
 const router = express.Router();
 
