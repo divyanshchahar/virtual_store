@@ -59,4 +59,4 @@ const userSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: () => Date.now() },
 });
 
-export default mongoose.model("users", userSchema);
+export const Users = mongoose.model("users", userSchema);
