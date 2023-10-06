@@ -16,6 +16,10 @@
     "dev": "nodemon ./src/index.js"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cookie-parser": "^1.4.4",
+    "@types/cors": "^2.8.14",
+    "@types/jsonwebtoken": "^9.0.3",
     "nodemon": "^2.0.22"
   }
 }
