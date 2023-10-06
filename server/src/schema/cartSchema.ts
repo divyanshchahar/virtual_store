@@ -23,4 +23,4 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("cart", cartSchema);
+export default mongoose.model("cart", cartSchema);

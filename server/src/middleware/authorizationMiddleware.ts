@@ -23,4 +23,4 @@ function authorizeAcess(req, res, next) {
   }
 }
 
-module.exports = authorizeAcess;
+export default authorizeAcess;
