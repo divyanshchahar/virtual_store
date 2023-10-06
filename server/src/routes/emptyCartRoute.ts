@@ -1,6 +1,6 @@
 import express from "express";
 import authorizationMiddleware from "../middleware/authorizationMiddleware";
-import Cart from "../schema/cartSchema";
+import { Cart } from "../schema/cartSchema";
 
 const router = express.Router();
 

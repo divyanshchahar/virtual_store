@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
-import User from "../schema/userSchema";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.route("/").post(async (req, res) => {
   try {
     if (!req.body.password || !req.body.email) return res.sendStatus(400);
 
-    const [user] = await User.find({ email: req.body.email });
+    const [user] = await Users.find({ email: req.body.email });
 
     if (!user) return res.status(404);
 

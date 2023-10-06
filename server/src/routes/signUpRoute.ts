@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import express from "express";
 import jwt from "jsonwebtoken";
-import User from "../schema/userSchema";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.route("/").post(async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const hashedUser = { ...req.body, password: hashedPassword };
 
-    const user = await User.create(hashedUser);
+    const user = await Users.create(hashedUser);
 
     const acessToken = jwt.sign(
       { id: user._id.toString() },

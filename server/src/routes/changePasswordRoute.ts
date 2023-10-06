@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import express from "express";
 import authorizationMiddleware from "../middleware/authorizationMiddleware";
-import User from "../schema/userSchema";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
     if (!req.body.password || !req.body.email || !req.body.newPasssword)
       return res.sendStatus(400);
 
-    const [user] = await User.find({ email: req.body.email });
+    const [user] = await Users.find({ email: req.body.email });
 
     if (!user) return res.status(404).end();
 
@@ -20,7 +20,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
     );
 
     if (isAuthenticatd) {
-      const user = await User.findById(req.id);
+      const user = await Users.findById(req.id);
 
       if (!user) return res.status(404).end();
 

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import express from "express";
-import User from "../schema/userSchema";
+import { Users } from "../schema/userSchema";
 
 const authorizationMiddleware = require("../middleware/authorizationMiddleware");
 
@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.id);
+    const user = await Users.findById(req.id);
 
     if (!user) return res.status(404);
 
@@ -20,7 +20,7 @@ router.route("/").get(authorizationMiddleware, async (req, res) => {
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.id);
+    const user = await Users.findById(req.id);
 
     if (!user) return res.status(404);
 
@@ -59,7 +59,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
 router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
-    const isDeleted = await User.findByIdAndDelete(req.id);
+    const isDeleted = await Users.findByIdAndDelete(req.id);
 
     if (!isDeleted) return res.status(400).end();
     res.status(200).send({}).end();

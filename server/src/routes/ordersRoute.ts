@@ -1,6 +1,6 @@
 import express from "express";
 import authorizationMiddleware from "../middleware/authorizationMiddleware";
-import Orders from "../schema/ordersSchema";
+import { Orders } from "../schema/ordersSchema";
 
 const router = express.Router();
 

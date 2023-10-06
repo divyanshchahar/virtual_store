@@ -1,8 +1,8 @@
 import express from "express";
 import authorizationMiddleware from "../middleware/authorizationMiddleware";
-import Cart from "../schema/cartSchema";
-import Product from "../schema/productSchema";
-import User from "../schema/userSchema";
+import { Cart } from "../schema/cartSchema";
+import { Products } from "../schema/productSchema";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ router.route("/").post(authorizationMiddleware, async (req, res) => {
 
     if (!req.body.productId || !hasQty) return res.status(400).end();
 
-    const isProduct = await Product.findById(req.body.productId);
+    const isProduct = await Products.findById(req.body.productId);
 
     if (!isProduct) return res.status(404).end();
 
@@ -50,8 +50,8 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
     if (!req.body.productId || !hasQty) return res.status(400).end();
 
-    const isCustomer = await User.findById(req.id);
-    const isProduct = await Product.findById(req.body.productId);
+    const isCustomer = await Users.findById(req.id);
+    const isProduct = await Products.findById(req.body.productId);
     const [cart] = await Cart.find({ customerId: req.id });
 
     if (!isCustomer || !isProduct || !cart) return res.status(404).end();
