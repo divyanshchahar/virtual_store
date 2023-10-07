@@ -1,5 +1,5 @@
-const express = require("express");
-const Products = require("../schema/productSchema");
+import express from "express";
+import { Products } from "../schema/productSchema";
 
 const router = express.Router();
 
@@ -21,4 +21,4 @@ router.route("/:productId").get(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,7 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const User = require("../schema/userSchema");
-
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import express from "express";
+import jwt from "jsonwebtoken";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -13,7 +12,7 @@ router.route("/").post(async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const hashedUser = { ...req.body, password: hashedPassword };
 
-    const user = await User.create(hashedUser);
+    const user: any = await Users.create(hashedUser); // fix this any
 
     const acessToken = jwt.sign(
       { id: user._id.toString() },
@@ -44,4 +43,4 @@ router.route("/").post(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

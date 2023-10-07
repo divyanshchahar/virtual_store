@@ -1,7 +1,6 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-const User = require("../schema/userSchema");
+import cookieParser from "cookie-parser";
+import express from "express";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -9,7 +8,7 @@ router.use(cookieParser());
 
 router.route("/").post(async (req, res) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const refreshToken: string = req.cookies.refreshToken.toString();
 
     if (!refreshToken) return res.status(401).end();
 
@@ -17,7 +16,8 @@ router.route("/").post(async (req, res) => {
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (error, decoded) => {
-        if (error) return res.status(403).end();
+        if (error || !decoded || typeof decoded === "string")
+          return res.status(403).end();
 
         const acessToken = jwt.sign(
           { id: decoded.id.toString() },
@@ -35,4 +35,4 @@ router.route("/").post(async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
