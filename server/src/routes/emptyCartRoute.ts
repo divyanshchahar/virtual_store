@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
-    const [cart] = await Cart.find({ customerId: req.id });
+    const [cart] = await Cart.find({ customerId: req.headers.id });
 
     if (!cart) return res.status(404).end();
 
