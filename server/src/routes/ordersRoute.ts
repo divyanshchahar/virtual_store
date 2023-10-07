@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    const orders = await Orders.find({ customerId: req.id });
+    const orders = await Orders.find({ customerId: req.headers.id });
 
     if (!orders) return res.status(404).end();
 
@@ -18,7 +18,10 @@ router.route("/").get(authorizationMiddleware, async (req, res) => {
 
 router.route("/").post(authorizationMiddleware, async (req, res) => {
   try {
-    const orders = await Orders.create({ customerId: req.id, ...req.body });
+    const orders = await Orders.create({
+      customerId: req.headers.id,
+      ...req.body,
+    });
     res.status(200).send(orders).end();
   } catch (error) {
     res.status(500).send(error).end();
