@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    const [cart] = await Cart.find({ customerId: req.id });
+    const [cart] = await Cart.find({ customerId: req.headers.id });
 
     if (!cart) return res.status(404).end();
 
@@ -31,7 +31,7 @@ router.route("/").post(authorizationMiddleware, async (req, res) => {
     if (!isProduct) return res.status(404).end();
 
     const cart = await Cart.create({
-      customerId: req.id,
+      customerId: req.headers.id,
       products: [{ productId: req.body.productId, qty: req.body.qty }],
     });
 
@@ -50,9 +50,9 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
     if (!req.body.productId || !hasQty) return res.status(400).end();
 
-    const isCustomer = await Users.findById(req.id);
+    const isCustomer = await Users.findById(req.headers.id);
     const isProduct = await Products.findById(req.body.productId);
-    const [cart] = await Cart.find({ customerId: req.id });
+    const [cart] = await Cart.find({ customerId: req.headers.id });
 
     if (!isCustomer || !isProduct || !cart) return res.status(404).end();
 
@@ -84,8 +84,10 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
 router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
-    const { isDeleted } = await Cart.deleteOne({ customerId: req.id });
-    if (isDeleted.deletecount > 0) return res.status(200).send({}).end();
+    const isDeleted = await Cart.deleteOne({
+      customerId: req.headers.id,
+    });
+    if (isDeleted.deletedCount > 0) return res.status(200).send({}).end();
     return res.status(404).end();
   } catch (error) {
     return res.send(error).status(500).end();
