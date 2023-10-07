@@ -1,7 +1,7 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../schema/userSchema");
+import bcrypt from "bcrypt";
+import express from "express";
+import jwt from "jsonwebtoken";
+import { Users } from "../schema/userSchema";
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.route("/").post(async (req, res) => {
   try {
     if (!req.body.password || !req.body.email) return res.sendStatus(400);
 
-    const [user] = await User.find({ email: req.body.email });
+    const [user] = await Users.find({ email: req.body.email });
 
     if (!user) return res.status(404);
 
@@ -47,8 +47,8 @@ router.route("/").post(async (req, res) => {
 
     res.status(401).end();
   } catch (error) {
-    res.status(500).send(error.message).end();
+    res.status(500).send(error).end();
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -59,4 +59,4 @@ const userSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: () => Date.now() },
 });
 
-module.exports = mongoose.model("users", userSchema);
+export const Users = mongoose.model("users", userSchema);

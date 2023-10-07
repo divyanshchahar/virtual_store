@@ -1,12 +1,12 @@
-const Cart = require("../schema/cartSchema");
-const express = require("express");
-const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+import express from "express";
+import authorizationMiddleware from "../middleware/authorizationMiddleware";
+import { Cart } from "../schema/cartSchema";
 
 const router = express.Router();
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
-    const [cart] = await Cart.find({ customerId: req.id });
+    const [cart] = await Cart.find({ customerId: req.headers.id });
 
     if (!cart) return res.status(404).end();
 
@@ -20,4 +20,4 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
