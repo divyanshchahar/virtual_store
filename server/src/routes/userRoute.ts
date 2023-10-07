@@ -1,14 +1,14 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const User = require("../schema/userSchema");
+import bcrypt from "bcrypt";
+import express from "express";
+import { Users } from "../schema/userSchema";
 
-const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+import authorizationMiddleware from "../middleware/authorizationMiddleware";
 
 const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.id);
+    const user = await Users.findById(req.headers.id);
 
     if (!user) return res.status(404);
 
@@ -20,7 +20,7 @@ router.route("/").get(authorizationMiddleware, async (req, res) => {
 
 router.route("/").put(authorizationMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.id);
+    const user = await Users.findById(req.headers.id);
 
     if (!user) return res.status(404);
 
@@ -33,6 +33,8 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
       user.name = req?.body?.name;
       user.email = req?.body?.email;
       user.password = await bcrypt.hash(req?.body?.password, 10);
+
+      if (!user.address || !user.payments) return res.sendStatus(400);
 
       user.address.house = req?.body?.address?.house;
       user.address.street = req?.body?.address?.street;
@@ -59,7 +61,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
 
 router.route("/").delete(authorizationMiddleware, async (req, res) => {
   try {
-    const isDeleted = await User.findByIdAndDelete(req.id);
+    const isDeleted = await Users.findByIdAndDelete(req.headers.id);
 
     if (!isDeleted) return res.status(400).end();
     res.status(200).send({}).end();
@@ -68,4 +70,4 @@ router.route("/").delete(authorizationMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,6 +1,7 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
 
-function authorizeAcess(req, res, next) {
+function authorizeAcess(req: Request, res: Response, next: NextFunction) {
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -10,17 +11,18 @@ function authorizeAcess(req, res, next) {
     }
 
     jwt.verify(token, process.env.ACESS_TOKEN_SECRET, (error, decoded) => {
-      if (error) {
+      if (error || !decoded || typeof decoded === "string") {
         res.sendStatus(403);
         return;
       }
-      req.id = decoded.id;
+
+      req.headers.id = decoded.id;
 
       next();
     });
   } catch (error) {
-    res.send(error.message).status(500);
+    res.send(error).status(500);
   }
 }
 
-module.exports = authorizeAcess;
+export default authorizeAcess;

@@ -1,12 +1,12 @@
-const express = require("express");
-const Orders = require("../schema/ordersSchema");
-const authorizationMiddleware = require("../middleware/authorizationMiddleware");
+import express from "express";
+import authorizationMiddleware from "../middleware/authorizationMiddleware";
+import { Orders } from "../schema/ordersSchema";
 
 const router = express.Router();
 
 router.route("/").get(authorizationMiddleware, async (req, res) => {
   try {
-    const orders = await Orders.find({ customerId: req.id });
+    const orders = await Orders.find({ customerId: req.headers.id });
 
     if (!orders) return res.status(404).end();
 
@@ -18,11 +18,14 @@ router.route("/").get(authorizationMiddleware, async (req, res) => {
 
 router.route("/").post(authorizationMiddleware, async (req, res) => {
   try {
-    const orders = await Orders.create({ customerId: req.id, ...req.body });
+    const orders = await Orders.create({
+      customerId: req.headers.id,
+      ...req.body,
+    });
     res.status(200).send(orders).end();
   } catch (error) {
     res.status(500).send(error).end();
   }
 });
 
-module.exports = router;
+export default router;
