@@ -20,7 +20,7 @@ router.route("/").put(authorizationMiddleware, async (req, res) => {
     );
 
     if (isAuthenticatd) {
-      const user = await Users.findById(req.id);
+      const user = await Users.findById(req.headers.id);
 
       if (!user) return res.status(404).end();
 
