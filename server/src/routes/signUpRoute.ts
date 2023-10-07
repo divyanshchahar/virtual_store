@@ -12,7 +12,7 @@ router.route("/").post(async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const hashedUser = { ...req.body, password: hashedPassword };
 
-    const user = await Users.create(hashedUser);
+    const user: any = await Users.create(hashedUser); // fix this any
 
     const acessToken = jwt.sign(
       { id: user._id.toString() },
