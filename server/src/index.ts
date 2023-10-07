@@ -1,5 +1,5 @@
 import cors from "cors";
-import "dotenv/config";
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import cartRouter from "./routes/cartRoute";
@@ -12,6 +12,8 @@ import productsRouter from "./routes/productsRoute";
 import refreshTokenRouter from "./routes/refreshTokenRoute";
 import signUpRouter from "./routes/signUpRoute";
 import userRouter from "./routes/userRoute";
+
+dotenv.config();
 
 const app = express();
 
